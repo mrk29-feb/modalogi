@@ -207,7 +207,7 @@ function renderTentang() {
       el('li', { text: 'Kelayakan memakai ROI, waktu balik modal, NPV pada tiga tingkat diskonto, indeks profitabilitas, dan IRR. Tahun ke-2 dan seterusnya diekstrapolasi hingga lima tahun.' }),
       el('li', { text: 'Usaha bersiklus (ternak, tani) memakai batch bergilir: biaya keluar selama siklus, hasil masuk saat panen.' })])]),
     el('div', { class: 'card', style: 'margin-top:12px' }, [el('h3', { text: 'Bekerja dengan Excel' }), el('ul', { class: 'small', style: 'margin:8px 0 0 18px;line-height:1.7' }, [
-      el('li', { text: 'Unduh template di Beranda. Bentuknya menyesuaikan kelompok usaha, usaha spesifik, dan jumlah produk yang Bapak pilih, lengkap dengan baris cadangan untuk komponen tambahan.' }),
+      el('li', { text: 'Unduh template di Beranda. Bentuknya menyesuaikan kelompok usaha, usaha spesifik, dan jumlah produk, serta skema (syariah atau konvensional) yang Anda pilih, lengkap dengan baris cadangan untuk komponen tambahan. Isian yang tidak berlaku untuk pilihan Anda otomatis abu-abu, dan isian wajib yang kosong dihitung di bagian atas lembar Input.' }),
       el('li', { text: 'Isi sel berlatar biru muda. Lembar lain terkunci tanpa kata sandi agar rumus tidak rusak.' }),
       el('li', { text: 'Unggah kembali di Beranda. Modalogi membaca isian lewat nama rentang dan lembar meta tersembunyi, lalu menampilkan analisis lengkap.' }),
       el('li', { text: 'Laporan Excel dari tab Hasil memuat isian yang sama, sehingga bisa diunggah ulang untuk dilanjutkan.' })])]),

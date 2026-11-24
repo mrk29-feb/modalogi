@@ -24,38 +24,56 @@ var XL = (function () {
   function F(path, label, type, opts, hint) { return { k: 'field', path: path, label: label, type: type, opts: opts, hint: hint }; }
   function L(path, cols, min, extra, hint) { return { k: 'list', path: path, cols: cols, min: min || 6, extra: extra || 4, hint: hint }; }
   function Ar(path, labels, opts) { return { k: 'arr', path: path, labels: labels, opts: opts }; }
+  /* dep: daftar syarat (semua harus terpenuhi): {p: jalur isian, is: [label]} atau {p, not: [label]}. req: wajib terisi bila syarat terpenuhi. */
+  function D(item, dep, req) { item.dep = dep || null; item.req = !!req; return item; }
+  function RQ(item) { return D(item, null, true); }
+  var ON = function (p) { return { p: p, is: ['Ya'] }; };
   function schemaOf(U) {
     var S = [], j = U.jenis, syr = U.skema === 'syariah';
-    S.push({ sec: 'Profil usaha', items: [F('nama', 'Nama usaha', 'text'), F('skema', 'Skema', 'sel', O.skema), F('status', 'Status usaha', 'sel', O.status), F('pangan', 'Bahan baku utama berupa pangan?', 'bool', null, 'Memakai inflasi bahan pangan'), F('bulanMulai', 'Bulan mulai beroperasi', 'sel', O.bulan)] });
+    var kbOn = syr || (U.musim && U.musim.mode === 'kb');
+    function withCur(opts, cur) { if (cur === undefined || cur === null) return opts; for (var i = 0; i < opts.length; i++) if (opts[i].v === cur) return opts; return opts.concat([{ v: cur, l: String(cur) }]); }
+    var biayaOpts = withCur(syr ? O.biaya.filter(function (x) { return x.v !== 'Pinjaman anuitas' && x.v !== 'Pinjaman flat'; }) : O.biaya.filter(function (x) { return x.v !== 'Murabahah' && x.v !== 'Ijarah'; }), U.pembiayaan && U.pembiayaan.jenis);
+    var musimOpts = kbOn ? O.musim : O.musim.filter(function (x) { return x.v !== 'kb'; });
+    S.push({ sec: 'Profil usaha', items: [RQ(F('nama', 'Nama usaha', 'text')), (function () { var f = F('skema', 'Skema (terkunci sesuai template)', 'sel', O.skema); f.locked = true; return f; })(), F('status', 'Status usaha', 'sel', O.status), F('pangan', 'Bahan baku utama berupa pangan?', 'bool', null, 'Memakai inflasi bahan pangan'), F('bulanMulai', 'Bulan mulai beroperasi', 'sel', O.bulan)] });
     U.produk.forEach(function (p, i) {
       var tp = tipeOf(U, p), pre = 'produk.' + i + '.', items;
-      var head = (tp === 'omzet' ? 'Kategori dagangan ' : (tp === 'batch' ? 'Komoditas bersiklus ' : (j === 'jasa' ? 'Layanan ' : 'Produk '))) + (i + 1);
+      var head = (tp === 'omzet' ? 'Kategori dagangan ' : (tp === 'batch' ? 'Komoditas bersiklus ' : (j === 'jasa' ? 'Layanan ' : (j === 'kuliner' ? 'Menu ' : 'Produk ')))) + (i + 1);
       var cn = [{ key: 'nama', label: 'Nama komponen', type: 'text' }, { key: 'nilai', label: 'Biaya per satuan (Rp)', type: 'rp' }];
-      if (tp === 'omzet') items = [F(pre + 'nama', 'Nama kategori', 'text'), F(pre + 'omzet', 'Penjualan per bulan (Rp)', 'rp'), F(pre + 'margin', 'Margin kotor (%)', 'num', null, 'Laba kotor dari harga jual'), F(pre + 'hariStok', 'Perputaran stok (hari)', 'num', null, 'Menentukan stok awal sebagai modal kerja'), F(pre + 'susutPct', 'Susut atau kedaluwarsa (%)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
-      else if (tp === 'batch') items = [F(pre + 'nama', 'Nama komoditas', 'text'), F(pre + 'satuan', 'Satuan hasil', 'text'), F(pre + 'harga', 'Harga per satuan hasil (Rp)', 'rp'), F(pre + 'siklus', 'Panjang siklus (bulan)', 'num', null, 'Dari mulai sampai panen'), F(pre + 'jumlah', 'Jumlah batch bergilir', 'num', null, 'Batch dimulai bergantian agar panen merata'), F(pre + 'hasil', 'Hasil per batch (satuan hasil)', 'num'), F(pre + 'matiPct', 'Kematian, gagal panen, atau susut (%)', 'num'),
+      if (tp === 'omzet') items = [RQ(F(pre + 'nama', 'Nama kategori', 'text')), RQ(F(pre + 'omzet', 'Penjualan per bulan (Rp)', 'rp')), RQ(F(pre + 'margin', 'Margin kotor (%)', 'num', null, 'Laba kotor dari harga jual')), F(pre + 'hariStok', 'Perputaran stok (hari)', 'num', null, 'Menentukan stok awal sebagai modal kerja'), F(pre + 'susutPct', 'Susut atau kedaluwarsa (%)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
+      else if (tp === 'batch') items = [RQ(F(pre + 'nama', 'Nama komoditas', 'text')), F(pre + 'satuan', 'Satuan hasil', 'text'), RQ(F(pre + 'harga', 'Harga per satuan hasil (Rp)', 'rp')), RQ(F(pre + 'siklus', 'Panjang siklus (bulan)', 'num', null, 'Dari mulai sampai panen')), RQ(F(pre + 'jumlah', 'Jumlah batch bergilir', 'num', null, 'Batch dimulai bergantian agar panen merata')), RQ(F(pre + 'hasil', 'Hasil per batch (satuan hasil)', 'num')), F(pre + 'matiPct', 'Kematian, gagal panen, atau susut (%)', 'num'),
         L(pre + 'biayaBatch', [{ key: 'nama', label: 'Biaya per batch', type: 'text' }, { key: 'nilai', label: 'Jumlah (Rp)', type: 'rp' }, { key: 'tahap', label: 'Waktu pembayaran', type: 'sel', opts: O.tahap }], 6, 3)];
       else {
-        items = [F(pre + 'nama', 'Nama ' + (j === 'jasa' ? 'layanan' : 'produk'), 'text'), F(pre + 'satuan', 'Satuan', 'text'), F(pre + 'harga', 'Harga jual per satuan (Rp)', 'rp'), F(pre + 'volume', 'Volume per bulan', 'num'), F(pre + 'kapasitas', 'Kapasitas per bulan (opsional)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
-        if (j === 'produksi' || j === 'campuran') items.push(F(pre + 'susutPct', 'Susut bahan (%)', 'num'));
+        items = [RQ(F(pre + 'nama', 'Nama ' + (j === 'jasa' ? 'layanan' : (j === 'kuliner' ? 'menu' : 'produk')), 'text')), F(pre + 'satuan', 'Satuan', 'text'), RQ(F(pre + 'harga', 'Harga jual per satuan (Rp)', 'rp')), RQ(F(pre + 'volume', 'Volume per bulan', 'num')), F(pre + 'kapasitas', 'Kapasitas per bulan (opsional)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
+        if (j === 'produksi' || j === 'campuran' || j === 'kuliner') items.push(F(pre + 'susutPct', 'Susut bahan (%)', 'num'));
         items.push(L(pre + 'hppA', [{ key: 'nama', label: 'A. Bahan baku dan barang dagangan (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppB', [{ key: 'nama', label: 'B. Tenaga kerja langsung (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppC', [{ key: 'nama', label: 'C. Kemasan dan bahan pendukung (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppD', [{ key: 'nama', label: 'D. Biaya langsung lain (per satuan)', type: 'text' }, cn[1]], 4, 3));
       }
       S.push({ sec: head, note: tp === 'unit' ? 'Isi biaya per satuan. Baris kosong boleh dibiarkan.' : '', items: items, produk: i, tipe: tp });
     });
     var q = 'q.';
     S.push({ sec: 'Biaya tetap per bulan', note: 'Dibayar walau tidak ada penjualan.', items: [L('biayaTetap', [{ key: 'nama', label: 'Biaya tetap', type: 'text' }, { key: 'nilai', label: 'Per bulan (Rp)', type: 'rp' }], 8, 5),
-      F(q + 'sewa.on', 'Membayar sewa tempat?', 'bool'), F(q + 'sewa.nilai', 'Sewa per bulan (Rp)', 'rp'), F(q + 'karyawan.on', 'Mempekerjakan karyawan dengan upah tetap?', 'bool'), F(q + 'karyawan.nilai', 'Upah tetap per bulan (Rp)', 'rp'),
-      F(q + 'kendaraan.on', 'Memakai kendaraan untuk usaha?', 'bool'), F(q + 'kendaraan.nilai', 'BBM dan perawatan per bulan (Rp)', 'rp'), F(q + 'legalitas.on', 'Perlu izin, sertifikasi, atau legalitas?', 'bool'), F(q + 'legalitas.nilai', 'Total biaya izin dan sertifikasi (Rp)', 'rp'),
-      F(q + 'marketplace.on', 'Berjualan lewat marketplace atau antar-jemput?', 'bool'), F(q + 'marketplace.pct', 'Komisi dan biaya platform (% penjualan)', 'num'), F(q + 'tempo.on', 'Menjual secara tempo?', 'bool'), F(q + 'tempo.porsiTunai', 'Porsi penjualan tunai (%)', 'num')] });
-    S.push({ sec: 'Listrik dan mesin', note: 'Isi bila memakai mesin atau alat listrik besar.', items: [F(q + 'listrik.on', 'Memakai mesin atau alat listrik besar?', 'bool'), F(q + 'listrik.metode', 'Cara menghitung', 'sel', O.metode, 'Metode A dari tagihan, Metode B dari daya alat'), F(q + 'listrik.porsiA', 'A. Porsi tagihan untuk usaha ini (%)', 'num'), F(q + 'listrik.ramaiTagihan', 'A. Tagihan bulan ramai (Rp)', 'rp'), F(q + 'listrik.ramaiVol', 'A. Volume bulan ramai', 'num'), F(q + 'listrik.sepiTagihan', 'A. Tagihan bulan sepi (Rp)', 'rp'), F(q + 'listrik.sepiVol', 'A. Volume bulan sepi', 'num'),
-      F(q + 'listrik.daya', 'B. Total daya alat produksi (watt)', 'num'), F(q + 'listrik.jam', 'B. Jam pakai per hari', 'num'), F(q + 'listrik.hari', 'B. Hari pakai per bulan', 'num'), F(q + 'listrik.tarif', 'B. Tarif listrik per kWh (Rp)', 'rp'), F(q + 'listrik.tetapLain', 'B. Listrik dan air tetap lain per bulan (Rp)', 'rp')] });
+      F(q + 'sewa.on', 'Membayar sewa tempat?', 'bool'), D(F(q + 'sewa.nilai', 'Sewa per bulan (Rp)', 'rp'), [ON(q + 'sewa.on')], true), F(q + 'karyawan.on', 'Mempekerjakan karyawan dengan upah tetap?', 'bool'), D(F(q + 'karyawan.nilai', 'Upah tetap per bulan (Rp)', 'rp'), [ON(q + 'karyawan.on')], true),
+      F(q + 'kendaraan.on', 'Memakai kendaraan untuk usaha?', 'bool'), D(F(q + 'kendaraan.nilai', 'BBM dan perawatan per bulan (Rp)', 'rp'), [ON(q + 'kendaraan.on')], true), F(q + 'legalitas.on', 'Perlu izin, sertifikasi, atau legalitas?', 'bool'), D(F(q + 'legalitas.nilai', 'Total biaya izin dan sertifikasi (Rp)', 'rp'), [ON(q + 'legalitas.on')], true),
+      F(q + 'marketplace.on', 'Berjualan lewat marketplace atau antar-jemput?', 'bool'), D(F(q + 'marketplace.pct', 'Komisi dan biaya platform (% penjualan)', 'num'), [ON(q + 'marketplace.on')], true), F(q + 'tempo.on', 'Menjual secara tempo?', 'bool'), D(F(q + 'tempo.porsiTunai', 'Porsi penjualan tunai (%)', 'num'), [ON(q + 'tempo.on')], true)] });
+    var LA = [ON(q + 'listrik.on'), { p: q + 'listrik.metode', is: ['Dari tagihan'] }], LB = [ON(q + 'listrik.on'), { p: q + 'listrik.metode', is: ['Dari daya alat'] }];
+    S.push({ sec: 'Listrik dan mesin', note: 'Isi bila memakai mesin atau alat listrik besar. Bagian A atau B aktif sesuai cara menghitung yang dipilih.', items: [F(q + 'listrik.on', 'Memakai mesin atau alat listrik besar?', 'bool'), D(F(q + 'listrik.metode', 'Cara menghitung', 'sel', O.metode, 'Metode A dari tagihan, Metode B dari daya alat'), [ON(q + 'listrik.on')], false),
+      D(F(q + 'listrik.porsiA', 'A. Porsi tagihan untuk usaha ini (%)', 'num'), LA, true), D(F(q + 'listrik.ramaiTagihan', 'A. Tagihan bulan ramai (Rp)', 'rp'), LA, true), D(F(q + 'listrik.ramaiVol', 'A. Volume bulan ramai', 'num'), LA, true), D(F(q + 'listrik.sepiTagihan', 'A. Tagihan bulan sepi (Rp)', 'rp'), LA, true), D(F(q + 'listrik.sepiVol', 'A. Volume bulan sepi', 'num'), LA, true),
+      D(F(q + 'listrik.daya', 'B. Total daya alat produksi (watt)', 'num'), LB, true), D(F(q + 'listrik.jam', 'B. Jam pakai per hari', 'num'), LB, true), D(F(q + 'listrik.hari', 'B. Hari pakai per bulan', 'num'), LB, true), D(F(q + 'listrik.tarif', 'B. Tarif listrik per kWh (Rp)', 'rp'), LB, true), D(F(q + 'listrik.tetapLain', 'B. Listrik dan air tetap lain per bulan (Rp)', 'rp'), LB, false)] });
     var prodOpts = [{ v: 'semua', l: 'Semua' }].concat(U.produk.map(function (p, i) { return { v: i, l: String(i + 1) }; }));
     S.push({ sec: 'Biaya lain yang terlewat', note: 'Tambahkan sendiri biaya yang belum tercantum. Kolom "Berlaku untuk" diisi Semua atau nomor produk.', items: [L('biayaLain', [{ key: 'nama', label: 'Nama biaya', type: 'text' }, { key: 'nilai', label: 'Nilai', type: 'num' }, { key: 'jenis', label: 'Jenis biaya', type: 'sel', opts: O.jenisBL }, { key: 'produk', label: 'Berlaku untuk', type: 'sel', opts: prodOpts }], 8, 5)] });
     S.push({ sec: 'Modal dan aset', items: [L('aset', [{ key: 'nama', label: 'Aset tetap', type: 'text' }, { key: 'nilai', label: 'Nilai (Rp)', type: 'rp' }, { key: 'umur', label: 'Umur ekonomis (bulan)', type: 'num' }], 8, 4, 'calcDep'), F('pemasaranAwal', 'Pemasaran dan promosi awal (Rp)', 'rp'), F('kasAwal', 'Saldo kas awal unit usaha (Rp)', 'rp'), F('ziswaf', (syr ? 'Dana sosial (zakat, infak, sedekah, wakaf)' : 'Hibah atau dana sosial') + ' (Rp)', 'rp'), F('lainnya', 'Sumber lain: hibah program, mitra (Rp)', 'rp')] });
-    S.push({ sec: 'Pembiayaan eksternal', note: 'Pilih Tidak ada bila memakai modal sendiri. Murabahah dan Ijarah untuk syariah, pinjaman untuk konvensional.', items: [F('pembiayaan.jenis', 'Jenis pembiayaan', 'sel', O.biaya), F('pembiayaan.lembaga', 'Nama lembaga (opsional)', 'text'), F('pembiayaan.hargaBeli', 'Murabahah: harga beli barang oleh lembaga (Rp)', 'rp'), F('pembiayaan.margin', 'Murabahah: total margin disepakati (Rp)', 'rp'), F('pembiayaan.sewa', 'Ijarah: sewa per bulan (Rp)', 'rp'), F('pembiayaan.pokok', 'Pinjaman: pokok (Rp)', 'rp'), F('pembiayaan.bunga', 'Pinjaman: bunga per tahun (%)', 'num'), F('pembiayaan.tenor', 'Tenor (bulan)', 'num')] });
-    S.push({ sec: 'Akad dan bagi hasil (skema syariah)', note: 'Diisi bila skema Syariah.', items: [F('akad.jenis', 'Akad kerja sama pengelolaan', 'sel', O.akad), F('akad.nisbahPemilik', 'Nisbah pemilik modal atas laba (%)', 'num'), F('akad.porsiModal', 'Musyarakah: porsi modal pemilik modal (%)', 'num'), F('akad.wakaf', 'Nisbah wakaf atau dana sosial atas laba (%)', 'num'), F('akad.frek', 'Frekuensi pembayaran bagi hasil', 'sel', O.frek)] });
-    S.push({ sec: 'Asumsi', note: 'Boleh dibiarkan seperti bawaan.', items: [F('musim.mode', 'Pola musim', 'sel', O.musim), F('musim.periodeAwal', 'Kalender Berkah: periode pada bulan operasi ke-1', 'sel', O.periode),
-      Ar('musim.tingkatKB', KB_PERIODE, O.level), Ar('musim.tingkatSendiri', MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); }), O.level),
-      F('ref.inflasiUmum', 'Inflasi umum per tahun (%)', 'num'), F('ref.inflasiPangan', 'Inflasi bahan pangan per tahun (%)', 'num'), F('ref.pph', 'PPh final atas penjualan (%)', 'num'), F('ref.dTinggi', 'Tambahan diskonto skenario tinggi (poin %)', 'num'), F('ref.dSangatTinggi', 'Tambahan diskonto sangat tinggi (poin %)', 'num'), F('ref.kasMinBulan', 'Target kas minimum (bulan biaya tetap)', 'num'), F('ref.amortBulan', 'Masa amortisasi izin (bulan)', 'num')] });
+    var PB = { p: 'pembiayaan.jenis', not: ['Tidak ada'] };
+    var pbItems = [F('pembiayaan.jenis', 'Jenis pembiayaan', 'sel', biayaOpts), D(F('pembiayaan.lembaga', 'Nama lembaga (opsional)', 'text'), [PB], false)];
+    if (syr) pbItems.push(D(F('pembiayaan.hargaBeli', 'Murabahah: harga beli barang oleh lembaga (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Murabahah'] }], true), D(F('pembiayaan.margin', 'Murabahah: total margin disepakati (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Murabahah'] }], true), D(F('pembiayaan.sewa', 'Ijarah: sewa per bulan (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Ijarah'] }], true));
+    else pbItems.push(D(F('pembiayaan.pokok', 'Pinjaman: pokok (Rp)', 'rp'), [PB], true), D(F('pembiayaan.bunga', 'Pinjaman: bunga per tahun (%)', 'num'), [PB], true));
+    pbItems.push(D(F('pembiayaan.tenor', 'Tenor (bulan)', 'num'), [PB], true));
+    S.push({ sec: 'Pembiayaan eksternal', note: syr ? 'Pilih Tidak ada bila memakai modal sendiri. Isian yang tidak sesuai pilihan otomatis abu-abu dan terkunci.' : 'Pilih Tidak ada bila memakai modal sendiri. Isian yang tidak sesuai pilihan otomatis abu-abu dan terkunci.', items: pbItems });
+    if (syr) S.push({ sec: 'Akad dan bagi hasil', note: 'Pilih akad. Isian yang tidak diperlukan akad tersebut otomatis abu-abu dan terkunci.', items: [F('akad.jenis', 'Akad kerja sama pengelolaan', 'sel', O.akad), D(F('akad.nisbahPemilik', 'Nisbah pemilik modal atas laba (%)', 'num'), [{ p: 'akad.jenis', is: ['Mudharabah', 'Musyarakah'] }], true), D(F('akad.porsiModal', 'Musyarakah: porsi modal pemilik modal (%)', 'num'), [{ p: 'akad.jenis', is: ['Musyarakah'] }], true), F('akad.wakaf', 'Nisbah wakaf atau dana sosial atas laba (%)', 'num'), D(F('akad.frek', 'Frekuensi pembayaran bagi hasil', 'sel', O.frek), [{ p: 'akad.jenis', is: ['Mudharabah', 'Musyarakah'] }], false)] });
+    var MK = { p: 'musim.mode', is: ['Kalender Berkah'] }, MS = { p: 'musim.mode', is: ['Pola sendiri'] };
+    var asm = [F('musim.mode', 'Pola musim', 'sel', musimOpts)];
+    if (kbOn) asm.push(D(F('musim.periodeAwal', 'Kalender Berkah: periode pada bulan operasi ke-1', 'sel', O.periode), [MK], false), D(Ar('musim.tingkatKB', KB_PERIODE, O.level), [MK], false));
+    asm.push(D(Ar('musim.tingkatSendiri', MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); }), O.level), [MS], false));
+    asm.push(F('ref.inflasiUmum', 'Inflasi umum per tahun (%)', 'num'), F('ref.inflasiPangan', 'Inflasi bahan pangan per tahun (%)', 'num'), F('ref.pph', 'PPh final atas penjualan (%)', 'num'), F('ref.dTinggi', 'Tambahan diskonto skenario tinggi (poin %)', 'num'), F('ref.dSangatTinggi', 'Tambahan diskonto sangat tinggi (poin %)', 'num'), F('ref.kasMinBulan', 'Target kas minimum (bulan biaya tetap)', 'num'), F('ref.amortBulan', 'Masa amortisasi izin (bulan)', 'num'));
+    S.push({ sec: 'Asumsi', note: 'Boleh dibiarkan seperti bawaan.', items: asm });
     S.push({ sec: 'Kejadian khusus (opsional)', note: 'Pembelian besar, hibah, atau penerimaan sekali waktu.', items: [L('kejadian', [{ key: 'ket', label: 'Keterangan', type: 'text' }, { key: 'bulan', label: 'Bulan ke-', type: 'num' }, { key: 'jenis', label: 'Jenis', type: 'sel', opts: O.kj }, { key: 'jumlah', label: 'Jumlah (Rp)', type: 'rp' }], 5, 3)] });
     return S;
   }
@@ -89,14 +107,48 @@ var XL = (function () {
     try { ws.protect('', {}); } catch (e) { }
   }
 
+  /* ---------- isian bergantung (tanpa makro): validasi data kustom + format bersyarat ---------- */
+  function condOf(dep, ADDR) {
+    if (!dep || !dep.length) return null;
+    var parts = [];
+    for (var i = 0; i < dep.length; i++) {
+      var a = ADDR.f[dep[i].p]; if (!a) continue; var ref = '$B$' + a.replace(/^B/, '');
+      if (dep[i].is) parts.push(dep[i].is.length === 1 ? ref + '="' + dep[i].is[0] + '"' : 'OR(' + dep[i].is.map(function (x) { return ref + '="' + x + '"'; }).join(',') + ')');
+      else if (dep[i].not) parts.push('AND(' + dep[i].not.map(function (x) { return ref + '<>"' + x + '"'; }).join(',') + ',' + ref + '<>"")');
+    }
+    if (!parts.length) return null;
+    return parts.length === 1 ? parts[0] : 'AND(' + parts.join(',') + ')';
+  }
+  function applyDeps(ws, ADDR, pend) {
+    var terms = [], pr = 1;
+    var GREY = { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFD9D9D9' }, fgColor: { argb: 'FFD9D9D9' } }, font: { color: { argb: 'FF9A9A9A' } } };
+    var WARN = { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFE9B8' }, fgColor: { argb: 'FFFFE9B8' } } };
+    pend.forEach(function (p) {
+      var it = p.it, cond = condOf(it.dep, ADDR), rng = 'B' + p.r0 + (p.r1 > p.r0 ? ':B' + p.r1 : ''), ref = '$B$' + p.r0;
+      if (cond) ws.addConditionalFormatting({ ref: rng, rules: [{ type: 'expression', priority: pr++, formulae: ['NOT(' + cond + ')'], style: GREY }] });
+      if (it.k === 'field') {
+        var c = ws.getCell('B' + p.r0);
+        if (cond && (it.type === 'num' || it.type === 'rp')) c.dataValidation = { type: 'custom', allowBlank: true, formulae: ['AND(' + cond + ',ISNUMBER(' + ref + '),' + ref + '>=0)'], showErrorMessage: true, errorTitle: 'Isian tidak berlaku', error: 'Sel ini hanya bisa diisi bila pilihan terkait memenuhi syarat, dan harus berupa angka nol atau lebih. Lihat sel yang mengendalikannya di atas.' };
+        else if (cond && it.type === 'text') c.dataValidation = { type: 'custom', allowBlank: true, formulae: [cond], showErrorMessage: true, errorTitle: 'Isian tidak berlaku', error: 'Sel ini hanya bisa diisi bila pilihan terkait memenuhi syarat.' };
+        if (it.req) {
+          ws.addConditionalFormatting({ ref: rng, rules: [{ type: 'expression', priority: pr++, formulae: [cond ? 'AND(' + cond + ',' + ref + '="")' : ref + '=""'], style: WARN }] });
+          terms.push(cond ? '(' + cond + ')*(' + ref + '="")' : '(' + ref + '="")');
+        }
+      }
+    });
+    ws.getCell('D3').value = 'Isian wajib belum terisi'; ws.getCell('D3').font = { bold: true, size: 10, color: { argb: C.ink } }; ws.getCell('D3').alignment = { horizontal: 'right' };
+    var e = ws.getCell('E3'); e.value = { formula: terms.length ? terms.join('+') : '0' }; e.font = { bold: true, size: 12 }; e.alignment = { horizontal: 'center' }; e.border = box(); e.numFmt = '0';
+    ws.addConditionalFormatting({ ref: 'E3', rules: [{ type: 'expression', priority: pr++, formulae: ['$E$3>0'], style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFE9B8' }, fgColor: { argb: 'FFFFE9B8' } } } }, { type: 'expression', priority: pr++, formulae: ['$E$3=0'], style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFCFEBDD' }, fgColor: { argb: 'FFCFEBDD' } }, font: { color: { argb: C.pos } } } }] });
+  }
+
   /* ---------- lembar Input ---------- */
   function writeInput(wb, U, S, opts) {
     var ws = wb.addWorksheet('Input', { views: [{ state: 'frozen', ySplit: 4, showGridLines: false }], properties: { tabColor: { argb: C.band } } });
     ws.columns = [{ width: 52 }, { width: 24 }, { width: 24 }, { width: 24 }, { width: 22 }, { width: 18 }];
-    var ADDR = { f: {}, l: {} }, META = { v: SCHEMA_V, fields: [], lists: [], arrs: [] }, r = 1, nf = 0;
+    var ADDR = { f: {}, l: {} }, META = { v: SCHEMA_V, fields: [], lists: [], arrs: [] }, r = 1, nf = 0, pend = [];
     ws.mergeCells('A1:F1'); var t = ws.getCell('A1'); t.value = 'Modalogi · Isian rencana usaha'; t.font = { size: 16, bold: true, color: { argb: C.white } }; t.fill = fillOf(C.band); t.alignment = { vertical: 'middle' }; ws.getRow(1).height = 30;
-    ws.mergeCells('A2:F2'); var st = ws.getCell('A2'); st.value = (opts.template ? 'Template' : 'Laporan') + ' · ' + usahaLabel(U) + ' · Isi sel berlatar biru muda. Sel lain terkunci. Unggah berkas ini ke Modalogi setelah diisi.'; st.font = { size: 10, color: { argb: C.mut } };
-    ws.mergeCells('A3:F3'); var br = ws.getCell('A3'); br.value = BRAND; br.font = { size: 9, italic: true, color: { argb: C.mut } };
+    ws.mergeCells('A2:F2'); var st = ws.getCell('A2'); st.value = (opts.template ? 'Template' : 'Laporan') + ' · ' + usahaLabel(U) + ' · Isi sel berlatar biru muda. Sel abu-abu tidak berlaku untuk pilihan Anda. Unggah berkas ini ke Modalogi setelah diisi.'; st.font = { size: 10, color: { argb: C.mut } };
+    ws.mergeCells('A3:C3'); var br = ws.getCell('A3'); br.value = BRAND; br.font = { size: 9, italic: true, color: { argb: C.mut } };
     ws.getRow(4).values = ['Uraian', 'Isian', 'Keterangan']; ws.getRow(4).eachCell(function (c) { c.font = { bold: true, color: { argb: C.ink } }; c.fill = fillOf(C.sec); c.border = box(); });
     r = 5;
     function inputStyle(c, type) { c.fill = fillOf(C.inp); c.border = box(C.inpLine); c.protection = { locked: false }; c.alignment = { horizontal: type === 'text' || type === 'sel' || type === 'bool' ? 'left' : 'right' }; if (type === 'rp' || type === 'num') c.numFmt = numFmt(type); }
@@ -118,12 +170,15 @@ var XL = (function () {
           var name = 'IN_' + (++nf), cell = ws.getCell('B' + r), v = getP(U, it.path);
           ws.getCell('A' + r).value = it.label; ws.getCell('A' + r).border = box();
           setVal(cell, it.type, it.opts, v); inputStyle(cell, it.type); validate(cell, it.type, it.opts);
+          if (it.locked) { cell.protection = { locked: true }; cell.fill = fillOf(C.calc); cell.font = { bold: true }; }
+          if (it.dep || it.req) pend.push({ it: it, r0: r, r1: r });
           if (it.hint) { ws.getCell('C' + r).value = it.hint; ws.getCell('C' + r).font = { size: 9, color: { argb: C.mut } }; }
           wb.definedNames.add("Input!$B$" + r, name); ADDR.f[it.path] = 'B' + r;
           META.fields.push({ n: name, p: it.path, t: it.type, o: it.opts ? it.opts.map(function (x) { return [x.v, x.l]; }) : null }); r++;
         } else if (it.k === 'arr') {
           var arr = getP(U, it.path) || [], r0 = r;
           it.labels.forEach(function (lab, i) { ws.getCell('A' + r).value = lab; ws.getCell('A' + r).border = box(); var c = ws.getCell('B' + r); c.value = arr[i] || it.opts[0].l; c.value = optLabel(it.opts, arr[i] === undefined ? it.opts[0].v : arr[i]); inputStyle(c, 'sel'); validate(c, 'sel', it.opts); r++; });
+          if (it.dep) pend.push({ it: it, r0: r0, r1: r - 1 });
           var nm = 'AR_' + (META.arrs.length + 1); wb.definedNames.add('Input!$B$' + r0 + ':$B$' + (r - 1), nm);
           META.arrs.push({ n: nm, p: it.path, o: it.opts.map(function (x) { return [x.v, x.l]; }), len: it.labels.length });
         } else if (it.k === 'list') {
@@ -146,6 +201,7 @@ var XL = (function () {
       });
       r++;
     });
+    applyDeps(ws, ADDR, pend);
     brandRow(ws, r + 1); footerOf(ws); lock(ws);
     return { ws: ws, ADDR: ADDR, META: META, nextRow: r + 3 };
   }
@@ -208,10 +264,11 @@ var XL = (function () {
     var ws = wb.addWorksheet('Petunjuk', { views: [{ showGridLines: false }], properties: { tabColor: { argb: 'FFF2B33D' } } });
     ws.columns = [{ width: 110 }];
     var lines = [['Modalogi · ' + (opts.template ? 'Template Excel' : 'Laporan Excel'), 't'], ['Clear plans, clearer numbers.', 's'], ['', ''],
-      ['Usaha: ' + usahaLabel(U) + ' · Skema: ' + (U.skema === 'syariah' ? 'Syariah' : 'Konvensional') + ' · ' + U.produk.length + ' ' + (U.jenis === 'dagang' ? 'kategori' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'komoditas' : 'produk atau layanan')), 'b'], ['', ''],
+      ['Usaha: ' + usahaLabel(U) + ' · Skema: ' + (U.skema === 'syariah' ? 'Syariah (template memuat akad, nisbah, dan Kalender Berkah)' : 'Konvensional (template memuat pinjaman dan pola musim sendiri)') + ' · ' + U.produk.length + ' ' + (U.jenis === 'kuliner' ? 'menu' : U.jenis === 'dagang' ? 'kategori' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'komoditas' : 'produk atau layanan')), 'b'], ['', ''],
       ['Cara memakai', 'h'], ['1. Isi hanya sel berlatar biru muda di lembar Input. Sel lain terkunci agar rumus tidak rusak (tanpa kata sandi).', ''], ['2. Baris kosong di tiap daftar disediakan untuk komponen tambahan. Biaya yang tidak ada cukup dikosongkan.', ''],
-      ['3. Lembar Ringkasan menampilkan perkiraan cepat dengan rumus Excel.', ''], ['4. Unggah berkas ini di Modalogi (menu Beranda, Unggah Excel) untuk analisis lengkap: laba rugi 12 bulan, arus kas, kelayakan, sensitivitas, dan pembiayaan.', ''],
-      ['5. Jangan mengubah nama lembar, menghapus lembar, atau memindahkan sel. Struktur isian dikenali oleh Modalogi.', ''], ['', ''],
+      ['3. Isian yang bergantung pada pilihan Ya atau Tidak, akad, pembiayaan, atau cara hitung listrik akan berwarna abu-abu dan menolak isian bila tidak berlaku. Sel berlatar kuning lembut adalah isian wajib yang belum terisi. Jumlahnya tampil di sel E3 lembar Input (hijau bila sudah nol). Menempel (paste) data bisa melewati penolakan ini, tetapi Modalogi tetap mengabaikan isian yang tidak berlaku.', ''],
+      ['4. Lembar Ringkasan menampilkan perkiraan cepat dengan rumus Excel.', ''], ['5. Unggah berkas ini di Modalogi (menu Beranda, Unggah Excel) untuk analisis lengkap: laba rugi 12 bulan, arus kas, kelayakan, sensitivitas, dan pembiayaan.', ''],
+      ['6. Jangan mengubah nama lembar, menghapus lembar, atau memindahkan sel. Struktur isian dikenali oleh Modalogi.', ''], ['', ''],
       ['Penting', 'h'], ['Alat edukasi dan simulasi, bukan nasihat keuangan. Hasil bergantung pada angka yang dimasukkan.', ''], ['', ''], [BRAND + ' · Kerangka KUBAH dan Kalender Berkah © mrk29.', 'm']];
     lines.forEach(function (l, i) { var c = ws.getCell('A' + (i + 1)); c.value = l[0]; c.alignment = { wrapText: true, vertical: 'top' }; if (l[1] === 't') c.font = { size: 18, bold: true, color: { argb: C.band } }; else if (l[1] === 's') c.font = { size: 11, italic: true, color: { argb: C.mut } }; else if (l[1] === 'h') c.font = { size: 12, bold: true, color: { argb: C.ink } }; else if (l[1] === 'b') c.font = { bold: true }; else if (l[1] === 'm') c.font = { size: 9, italic: true, color: { argb: C.mut } }; });
     footerOf(ws); lock(ws);

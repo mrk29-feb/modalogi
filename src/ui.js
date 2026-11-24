@@ -188,7 +188,7 @@ function templateCard() {
 }
 function renderBeranda() {
   var v = $('#v-beranda'); v.innerHTML = '';
-  var pick = ['laundry', 'bengkel', 'roti', 'konveksi', 'kelontong', 'lele', 'hidroponik', 'warunglaundry'];
+  var pick = ['laundry', 'bengkel', 'coffeeshop', 'roti', 'konveksi', 'kelontong', 'lele', 'hidroponik', 'warunglaundry'];
   var chips = PRESETS.filter(function (p) { return pick.indexOf(p.id) >= 0; }).map(function (p) { var j = JENIS.filter(function (x) { return x.id === p.jenis; })[0]; return el('button', { class: 'chip', type: 'button', onclick: function () { loadPreset(p.id); go('rencana'); } }, [ico(j.ikon), p.label]); });
   var fin = el('input', { type: 'file', accept: '.xlsx', style: 'display:none', id: 'fileIn', 'aria-label': 'Unggah berkas Excel' });
   fin.addEventListener('change', function () { handleUpload(fin.files[0]); fin.value = ''; });
@@ -199,11 +199,7 @@ function renderBeranda() {
   ['dragleave', 'drop'].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.remove('on'); }); });
   drop.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; handleUpload(f); });
   v.appendChild(el('div', { class: 'wrap' }, [
-    el('div', { class: 'hero' }, [
-      el('h1', { text: 'Clear plans, clearer numbers.' }),
-      el('p', { class: 'lead', text: 'Rancang rencana usaha dari harga pokok, titik impas, arus kas, sampai kelayakan dan kanvas model bisnis. Bisa syariah, bisa konvensional, untuk jasa, produksi, dagang, peternakan, pertanian, dan usaha campuran.' })
-    ]),
-    el('div', { class: 'grid g3', style: 'margin-top:22px' }, [
+    el('div', { class: 'grid g3' }, [
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-pencil')]), el('h3', { text: 'Isi langsung' }), el('p', { class: 'muted small', text: 'Jawab lima langkah singkat. Hasil dihitung saat itu juga, tanpa mengirim data ke mana pun.' }), el('button', { class: 'btn pri', type: 'button', onclick: function () { go('rencana'); } }, ['Mulai merencanakan', ico('ti-arrow-right')])])]),
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-file-spreadsheet')]), el('h3', { text: 'Unduh template Excel' }), el('p', { class: 'muted small', text: 'Bentuknya menyesuaikan usaha dan jumlah produk. Rumus terkunci, siap diisi di Excel.' }), templateCard()])]),
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-upload')]), el('h3', { text: 'Unggah Excel' }), el('p', { class: 'muted small', text: 'Unggah template yang sudah diisi (atau laporan Modalogi). Dashboard membacanya dan langsung menampilkan hasil.' }), drop, fin])])
@@ -215,7 +211,7 @@ function renderBeranda() {
     el('div', { class: 'grid g3', style: 'margin-top:14px' }, [
       el('div', { class: 'card tight' }, [el('h4', { text: 'Syariah atau konvensional' }), el('p', { class: 'muted small', text: 'Akad, nisbah, dan Kalender Berkah untuk skema syariah. Pinjaman dan bunga untuk konvensional.' })]),
       el('div', { class: 'card tight' }, [el('h4', { text: 'Fleksibel untuk banyak usaha' }), el('p', { class: 'muted small', text: 'Belasan contoh usaha, satu sampai sepuluh produk, usaha campuran, usaha bersiklus panen, dan biaya lain yang bisa ditambah sendiri.' })]),
-      el('div', { class: 'card tight' }, [el('h4', { text: 'Data tetap di perangkat' }), el('p', { class: 'muted small', text: 'Seluruh hitungan berjalan di peramban Bapak. Tidak ada akun dan tidak ada pengiriman data.' })])
+      el('div', { class: 'card tight' }, [el('h4', { text: 'Data tetap di perangkat' }), el('p', { class: 'muted small', text: 'Seluruh hitungan berjalan di peramban Anda. Tidak ada akun dan tidak ada pengiriman data.' })])
     ])
   ]));
 }
@@ -295,10 +291,10 @@ function stepProfil() {
   var wrap = el('div', { class: 'stack' }, [
     section('Tentang usaha', 'Isian singkat. Sisanya bisa diisi bertahap.', [
       grid('g2', [textField(U, 'nama', { label: 'Nama usaha', ph: 'Misalnya: Laundry Berkah' }), selField(U, 'bulanMulai', MONTHS.map(function (m, i) { return { v: i, l: m }; }), { label: 'Bulan mulai beroperasi', num: true, hint: 'Hanya untuk label bulan di tabel.' })])]),
-    section('Kelompok usaha', 'Menentukan bentuk isian di langkah berikutnya. Bila usaha Bapak gabungan, pilih Usaha campuran.', [el('div', { class: 'grid af' }, jbtn)]),
+    section('Kelompok usaha', 'Menentukan bentuk isian di langkah berikutnya. Bila usaha Anda gabungan, pilih Usaha campuran.', [el('div', { class: 'grid af' }, jbtn)]),
     section('Usaha spesifik', 'Pilih yang paling dekat untuk mendapat komponen biaya yang relevan, atau mulai kosong. Semua komponen bisa dihapus, diganti, dan ditambah. Angka contoh hanya ilustrasi.', [
       el('div', { class: 'chips' }, spes),
-      U.preset === 'kosong' ? el('div', { style: 'margin-top:12px;max-width:420px' }, [textField(U, 'usahaLain', { label: 'Jenis usaha Bapak (opsional)', ph: 'Misalnya: Bengkel las, jasa fotografi', hint: 'Dicantumkan di hasil dan laporan.' })]) : null]),
+      U.preset === 'kosong' ? el('div', { style: 'margin-top:12px;max-width:420px' }, [textField(U, 'usahaLain', { label: 'Jenis usaha Anda (opsional)', ph: 'Misalnya: Bengkel las, jasa fotografi', hint: 'Dicantumkan di hasil dan laporan.' })]) : null]),
     section('Skema dan status', null, [
       el('div', { class: 'row' }, [el('div', [el('div', { class: 't small muted', style: 'margin-bottom:4px', text: 'Skema' }), segField(U, 'skema', [{ v: 'syariah', l: 'Syariah' }, { v: 'konvensional', l: 'Konvensional' }], { aria: 'Skema', onchange: function () { onSkema(); }, rerender: function () { renderStep(); } })])]),
       el('p', { class: 'hint', text: U.skema === 'syariah' ? 'Syariah: pilihan akad dan nisbah, pembiayaan murabahah atau ijarah, dan Kalender Berkah sebagai pola musim.' : 'Konvensional: pembiayaan berupa pinjaman dengan bunga. Pola musim bisa diatur sendiri.' }),
@@ -315,7 +311,7 @@ function onSkema() {
 /* ---------- Langkah 2: Produk dan biaya ---------- */
 function productCard(p, i) {
   var j = U.jenis, tp = tipeOf(U, p), card = el('div', { class: 'pcard' });
-  var label = tp === 'omzet' ? 'Kategori' : (tp === 'batch' ? 'Komoditas' : (j === 'jasa' ? 'Layanan' : 'Produk'));
+  var label = tp === 'omzet' ? 'Kategori' : (tp === 'batch' ? 'Komoditas' : (j === 'jasa' ? 'Layanan' : (j === 'kuliner' ? 'Menu' : 'Produk')));
   var head = el('div', { class: 'ph' }, [el('span', { class: 'num', text: String(i + 1) }), j === 'campuran' ? el('span', { class: 'tag', text: tp === 'omzet' ? 'Dagang' : (tp === 'batch' ? 'Bersiklus' : 'Barang atau jasa') }) : null, el('div', { style: 'flex:1' }, [textField(p, 'nama', { ph: 'Nama ' + label.toLowerCase(), aria: 'Nama ' + label.toLowerCase(), onchange: function () { } })]),
     U.produk.length > 1 ? el('button', { type: 'button', class: 'x', 'aria-label': 'Hapus ' + label.toLowerCase(), onclick: function () { U.produk.splice(i, 1); fixBiayaLainRef(); change(); renderStep(); } }, [ico('ti-trash')]) : null]);
   card.appendChild(head);
@@ -330,7 +326,7 @@ function productCard(p, i) {
       return '<div class="sumline"><span>Hasil bersih per batch <b>' + dec(q.batch.hasilNet, 0) + ' ' + esc(q.satuan) + '</b> · Biaya per batch <b>' + rp(q.batch.biayaTotal) + '</b></span><span>Selisih per batch <b style="color:' + (lb >= 0 ? '#0B6B4F' : '#7E2D1A') + '">' + rp(lb) + '</b>' + (first ? ' · Panen pertama bulan ke-' + first : '') + '</span></div>';
     }, ''));
   } else {
-    card.appendChild(grid('g3', [textField(p, 'satuan', { label: 'Satuan', ph: 'kg, buah, porsi' }), rpField(p, 'harga', { label: 'Harga jual per satuan' }), numField(p, 'volume', { label: 'Volume per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Rata-rata di luar pengaruh musim.' }), numField(p, 'kapasitas', { label: 'Kapasitas per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Opsional. Volume dibatasi kapasitas.' }), numField(p, 'tumbuh', { label: 'Pertumbuhan per bulan', suf: '%' }), (j === 'produksi' || j === 'campuran') ? numField(p, 'susutPct', { label: 'Susut bahan', suf: '%', hint: 'Tambahan biaya bahan.' }) : null]));
+    card.appendChild(grid('g3', [textField(p, 'satuan', { label: 'Satuan', ph: 'kg, buah, porsi' }), rpField(p, 'harga', { label: 'Harga jual per satuan' }), numField(p, 'volume', { label: 'Volume per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Rata-rata di luar pengaruh musim.' }), numField(p, 'kapasitas', { label: 'Kapasitas per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Opsional. Volume dibatasi kapasitas.' }), numField(p, 'tumbuh', { label: 'Pertumbuhan per bulan', suf: '%' }), (j === 'produksi' || j === 'campuran' || j === 'kuliner') ? numField(p, 'susutPct', { label: 'Susut bahan', suf: '%', hint: 'Tambahan biaya bahan.' }) : null]));
     [['hppA', 'Bahan baku dan barang dagangan'], ['hppB', 'Tenaga kerja langsung'], ['hppC', 'Kemasan dan bahan pendukung'], ['hppD', 'Biaya langsung lain']].forEach(function (g) {
       card.appendChild(el('div', { class: 'grp' }, [el('h4', { text: g[1] + ' (per satuan)' }), itemList(p[g[0]], { namePh: 'Nama komponen', addLabel: 'Tambah komponen' })]));
     });
@@ -385,7 +381,7 @@ function stepProduk() {
     plist.appendChild(el('div', { class: 'row' }, btns.concat([el('span', { class: 'small muted', text: U.produk.length + ' dari 10' })])));
   }
   drawP();
-  var sub = U.jenis === 'campuran' ? 'Setiap kartu bisa berbeda jenisnya: barang atau jasa, dagangan per kategori, atau usaha bersiklus. Tambahkan sesuai lini usaha Bapak.' : U.jenis === 'dagang' ? 'Dagang diisi per kategori, bukan per barang. Cukup penjualan, margin, dan perputaran stok.' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Usaha bersiklus: biaya keluar lebih dulu, hasil masuk saat panen. Atur panjang siklus dan jumlah batch bergilir.' : 'Satu sampai sepuluh produk. Bila hanya satu, cukup isi satu kartu.');
+  var sub = U.jenis === 'campuran' ? 'Setiap kartu bisa berbeda jenisnya: barang atau jasa, dagangan per kategori, atau usaha bersiklus. Tambahkan sesuai lini usaha Anda.' : U.jenis === 'dagang' ? 'Dagang diisi per kategori, bukan per barang. Cukup penjualan, margin, dan perputaran stok.' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Usaha bersiklus: biaya keluar lebih dulu, hasil masuk saat panen. Atur panjang siklus dan jumlah batch bergilir.' : 'Satu sampai sepuluh produk. Bila hanya satu, cukup isi satu kartu.');
   wrap.appendChild(section((U.jenis === 'dagang' ? 'Kategori dagangan' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Komoditas dan siklus' : (U.jenis === 'campuran' ? 'Lini usaha' : 'Produk dan biaya per satuan'))) + ' · ' + usahaLabel(U), sub, [plist]));
   wrap.appendChild(section('Biaya tetap per bulan', 'Dibayar walau tidak ada penjualan. Jawab pertanyaan berikut, hanya yang Ya akan memunculkan isian.', [
     itemList(U.biayaTetap, { namePh: 'Misalnya: upah pengelola, perawatan', addLabel: 'Tambah biaya tetap' }),
@@ -473,7 +469,7 @@ function stepAsumsi() {
     mbox.innerHTML = '';
     var opts = [{ v: 'tanpa', l: 'Tanpa musim' }, { v: 'kb', l: 'Kalender Berkah' }, { v: 'sendiri', l: 'Pola sendiri' }];
     mbox.appendChild(el('div', { class: 'row' }, [segField(M, 'mode', opts, { aria: 'Pola musim', rerender: drawM })]));
-    mbox.appendChild(el('p', { class: 'hint', style: 'margin:8px 0 10px', text: M.mode === 'tanpa' ? 'Pendapatan dianggap merata tiap bulan.' : (M.mode === 'kb' ? 'Dua belas periode berbasis kalender hijriah dan kegiatan lembaga. Tingkat tiap periode bisa diubah. Pengali dinormalkan agar rata-ratanya 1,00.' : 'Dua belas bulan operasi dengan tingkat permintaan yang Bapak tentukan. Pengali dinormalkan agar rata-ratanya 1,00.') }));
+    mbox.appendChild(el('p', { class: 'hint', style: 'margin:8px 0 10px', text: M.mode === 'tanpa' ? 'Pendapatan dianggap merata tiap bulan.' : (M.mode === 'kb' ? 'Dua belas periode berbasis kalender hijriah dan kegiatan lembaga. Tingkat tiap periode bisa diubah. Pengali dinormalkan agar rata-ratanya 1,00.' : 'Dua belas bulan operasi dengan tingkat permintaan yang Anda tentukan. Pengali dinormalkan agar rata-ratanya 1,00.') }));
     if (M.mode === 'tanpa') return;
     var arrT = M.mode === 'kb' ? M.tingkatKB : M.tingkatSendiri;
     var names = M.mode === 'kb' ? KB_PERIODE : MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); });
@@ -488,9 +484,9 @@ function stepAsumsi() {
     mbox.appendChild(liveText('div', function () { return R ? '<div style="margin-top:12px">' + heatStrip(R.musim.mult, MONTHS.map(function (m, i) { return 'Bln ' + (i + 1); })) + '<div class="hint" style="margin-top:6px">Pengali musim per bulan operasi (rata-rata ' + dec(R.musim.avg, 2) + ').</div></div>' : ''; }));
   }
   drawM();
-  wrap.appendChild(section('Pola musim', U.skema === 'syariah' ? 'Kalender Berkah menyesuaikan volume dengan ritme musim. Bisa dipakai juga untuk usaha non-syariah.' : 'Atur ritme musim bila usaha Bapak punya bulan ramai dan sepi.', [mbox]));
+  wrap.appendChild(section('Pola musim', U.skema === 'syariah' ? 'Kalender Berkah menyesuaikan volume dengan ritme musim. Bisa dipakai juga untuk usaha non-syariah.' : 'Atur ritme musim bila usaha Anda punya bulan ramai dan sepi.', [mbox]));
   var rf = el('div'); var Rr = U.ref;
-  rf.appendChild(el('div', { class: 'note', style: 'margin-bottom:12px', text: 'Parameter standar per Okt 2026. Ubah hanya bila Bapak punya data yang lebih baru atau lebih tepat.' }));
+  rf.appendChild(el('div', { class: 'note', style: 'margin-bottom:12px', text: 'Parameter standar per Okt 2026. Ubah hanya bila Anda punya data yang lebih baru atau lebih tepat.' }));
   rf.appendChild(grid('g3', [numField(Rr, 'inflasiUmum', { label: 'Inflasi umum per tahun', suf: '%' }), numField(Rr, 'inflasiPangan', { label: 'Inflasi bahan pangan per tahun', suf: '%' }), numField(Rr, 'pph', { label: 'PPh final atas penjualan', suf: '%', hint: 'Tarif UMKM yang berlaku saat ini.' }), numField(Rr, 'dTinggi', { label: 'Tambahan diskonto skenario tinggi', suf: 'poin %' }), numField(Rr, 'dSangatTinggi', { label: 'Tambahan diskonto sangat tinggi', suf: 'poin %' }), numField(Rr, 'kasMinBulan', { label: 'Target kas minimum', suf: 'bln biaya', rp: false }), numField(Rr, 'amortBulan', { label: 'Masa amortisasi izin', suf: 'bln', rp: false })]));
   rf.appendChild(el('button', { class: 'btn sm', style: 'margin-top:12px', type: 'button', onclick: function () { U.ref = baseU().ref; change(); renderStep(); toast('Parameter dikembalikan ke nilai standar.'); } }, [ico('ti-refresh'), 'Kembalikan ke standar']));
   wrap.appendChild(section('Parameter standar', 'Inflasi, pajak, dan diskonto. Sudah terisi.', [rf]));

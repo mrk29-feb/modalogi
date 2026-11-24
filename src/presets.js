@@ -3,6 +3,7 @@ var JENIS = [
   { id: 'jasa', label: 'Jasa', ikon: 'ti-tools', ket: 'Laundry, bengkel, salon, percetakan', satuanContoh: 'per layanan' },
   { id: 'produksi', label: 'Produksi', ikon: 'ti-building-factory-2', ket: 'Roti, konveksi, olahan pangan, kerajinan', satuanContoh: 'per buah' },
   { id: 'dagang', label: 'Dagang', ikon: 'ti-shopping-cart', ket: 'Kelontong, kedai, toko pakaian', satuanContoh: '' },
+  { id: 'kuliner', label: 'Kuliner dan waralaba', ikon: 'ti-coffee', ket: 'Coffeeshop, minuman kekinian, ayam geprek, katering, waralaba', satuanContoh: 'per porsi' },
   { id: 'ternak', label: 'Peternakan dan budidaya', ikon: 'ti-fish', ket: 'Lele, ayam, kambing', satuanContoh: 'kg' },
   { id: 'tani', label: 'Pertanian', ikon: 'ti-plant-2', ket: 'Hidroponik, padi, sayuran', satuanContoh: 'kg' },
   { id: 'campuran', label: 'Usaha campuran', ikon: 'ti-layers', ket: 'Gabungan barang, jasa, dagang, siklus', satuanContoh: '' }
@@ -179,6 +180,89 @@ var PRESETS = [
       sewa: 2000000, karyawan: 2200000, market: 6,
       aset: [{ nama: 'Rak dan manekin', nilai: 6000000, umur: 48 }, { nama: 'Kamera dan lampu foto', nilai: 5000000, umur: 36 }],
       pemasaran: 1500000, lain: [{ nama: 'Kemasan dan pengiriman', nilai: 3, jenis: 'persen', produk: 'semua' }], musim: 'kb' });
+  } },
+  /* ---------------- KULINER DAN WARALABA ---------------- */
+  { id: 'coffeeshop', jenis: 'kuliner', label: 'Coffeeshop', build: function () {
+    return mk({ id: 'coffeeshop', jenis: 'kuliner', nama: 'Coffeeshop Contoh', pangan: true, status: 'Berjalan kurang dari 1 tahun',
+      produk: [
+        unitProduk({ nama: 'Kopi susu dan kopi kekinian', satuan: 'cup', harga: 22000, volume: 1700, kapasitas: 3000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Biji kopi', 2400), it('Susu segar dan creamer', 4300), it('Gula aren dan sirup', 1600), it('Es batu dan air', 300)], hppB: [], hppC: [it('Cup, tutup, dan sedotan', 1900), it('Stiker dan kantong bawa', 350)], hppD: [] }),
+        unitProduk({ nama: 'Kopi klasik (espresso, americano, latte, V60)', satuan: 'cup', harga: 26000, volume: 650, kapasitas: 1200, tumbuh: 1, susutPct: 3,
+          hppA: [it('Biji kopi pilihan', 4200), it('Susu', 2500), it('Gula dan sirup', 700), it('Air dan es', 250)], hppB: [], hppC: [it('Gelas atau cup dan tutup', 1700)], hppD: [it('Filter kertas dan bahan seduh lain', 300)] }),
+        unitProduk({ nama: 'Non-kopi (matcha, cokelat, teh)', satuan: 'cup', harga: 25000, volume: 500, kapasitas: 1000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bubuk matcha, cokelat, atau teh', 4800), it('Susu', 3300), it('Sirup dan gula', 1300), it('Es batu', 300)], hppB: [], hppC: [it('Cup, tutup, dan sedotan', 1900)], hppD: [] }),
+        unitProduk({ nama: 'Makanan pendamping (roti, pastry, camilan)', satuan: 'porsi', harga: 20000, volume: 450, kapasitas: 800, tumbuh: 1, susutPct: 5,
+          hppA: [it('Bahan atau barang titipan', 9800)], hppB: [], hppC: [it('Kemasan dan serbet', 800)], hppD: [] })],
+      tetap: [it('Pemeliharaan dan servis mesin', 350000), it('Pemasaran dan konten', 800000), it('Internet, musik, dan perlengkapan', 400000), it('Air galon, kebersihan, dan keamanan', 350000)],
+      sewa: 8000000, karyawan: 8500000, market: 6, legal: 3500000, listrik: { metode: 'B', daya: 6500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Mesin espresso', nilai: 38000000, umur: 60 }, { nama: 'Grinder', nilai: 9000000, umur: 48 }, { nama: 'Blender dan peralatan bar', nilai: 6000000, umur: 36 }, { nama: 'Kulkas, chiller, dan ice maker', nilai: 14000000, umur: 60 }, { nama: 'Furnitur dan dekorasi', nilai: 28000000, umur: 48 }, { nama: 'Renovasi dan interior', nilai: 35000000, umur: 60 }, { nama: 'Sistem kasir (POS) dan perangkat', nilai: 5000000, umur: 36 }],
+      pemasaran: 6000000, lain: [{ nama: 'Biaya pembayaran digital (QRIS)', nilai: 0.7, jenis: 'persen', produk: 'semua' }] });
+  } },
+  { id: 'kekinian', jenis: 'kuliner', label: 'Minuman kekinian (boba, teh buah)', build: function () {
+    return mk({ id: 'kekinian', jenis: 'kuliner', nama: 'Minuman Kekinian Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Milk tea dan boba', satuan: 'cup', harga: 15000, volume: 2200, kapasitas: 3500, tumbuh: 1.5, susutPct: 3,
+          hppA: [it('Teh, susu, dan creamer', 2600), it('Boba dan topping', 2200), it('Sirup dan gula', 900), it('Es batu', 250)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1700)], hppD: [] }),
+        unitProduk({ nama: 'Teh buah dan minuman segar', satuan: 'cup', harga: 13000, volume: 1200, kapasitas: 2000, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Teh', 700), it('Buah dan sirup buah', 2300), it('Gula', 500), it('Es batu', 250)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1600)], hppD: [] })],
+      tetap: [it('Internet dan perlengkapan', 250000), it('Pemasaran rutin', 600000), it('Air dan kebersihan', 200000)],
+      sewa: 2500000, karyawan: 5500000, market: 5, legal: 1500000, listrik: { metode: 'B', daya: 1500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Booth atau gerobak', nilai: 12000000, umur: 36 }, { nama: 'Sealer, blender, dan dispenser', nilai: 6000000, umur: 36 }, { nama: 'Kulkas dan freezer', nilai: 6000000, umur: 48 }, { nama: 'Sistem kasir (POS)', nilai: 3000000, umur: 36 }],
+      pemasaran: 3000000 });
+  } },
+  { id: 'geprek', jenis: 'kuliner', label: 'Ayam geprek dan makanan cepat saji', build: function () {
+    return mk({ id: 'geprek', jenis: 'kuliner', nama: 'Ayam Geprek Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Paket ayam geprek dan nasi', satuan: 'porsi', harga: 18000, volume: 2800, kapasitas: 4000, tumbuh: 1, susutPct: 4,
+          hppA: [it('Ayam potong', 6800), it('Tepung dan bumbu crispy', 1300), it('Cabai dan bawang untuk sambal', 1900), it('Beras untuk nasi', 1800), it('Minyak goreng', 1300)], hppB: [], hppC: [it('Boks, sendok, dan plastik', 1400)], hppD: [it('Gas', 450)] }),
+        unitProduk({ nama: 'Menu tambahan (mie, tahu-tempe, camilan)', satuan: 'porsi', harga: 9000, volume: 1200, kapasitas: 2000, tumbuh: 1, susutPct: 4,
+          hppA: [it('Bahan baku', 4400)], hppB: [], hppC: [it('Kemasan', 700)], hppD: [it('Gas', 200)] }),
+        unitProduk({ nama: 'Minuman (es teh, es jeruk)', satuan: 'cup', harga: 5000, volume: 2400, kapasitas: 3600, tumbuh: 1, susutPct: 2,
+          hppA: [it('Teh, jeruk, gula, dan es', 1200)], hppB: [], hppC: [it('Cup dan sedotan', 700)], hppD: [] })],
+      tetap: [it('Pemasaran rutin', 500000), it('Internet dan perlengkapan', 300000), it('Air dan kebersihan', 300000)],
+      sewa: 3000000, karyawan: 5500000, market: 6, legal: 1500000, listrik: { metode: 'B', daya: 2000, jam: 10, hari: 26, tarif: 1445, tetapLain: 100000 },
+      aset: [{ nama: 'Kompor gas dan wajan', nilai: 5000000, umur: 36 }, { nama: 'Freezer dan chiller', nilai: 8000000, umur: 60 }, { nama: 'Etalase, meja, dan kursi', nilai: 9000000, umur: 48 }, { nama: 'Peralatan dapur', nilai: 3500000, umur: 24 }, { nama: 'Sistem kasir (POS)', nilai: 3000000, umur: 36 }],
+      pemasaran: 3000000, lain: [{ nama: 'Biaya pembayaran digital (QRIS)', nilai: 0.7, jenis: 'persen', produk: 'semua' }] });
+  } },
+  { id: 'katering', jenis: 'kuliner', label: 'Katering dan dapur rumahan', build: function () {
+    return mk({ id: 'katering', jenis: 'kuliner', nama: 'Katering Contoh', skema: 'syariah', pangan: true, status: 'Berjalan kurang dari 1 tahun', periodeAwal: 1,
+      produk: [
+        unitProduk({ nama: 'Nasi kotak', satuan: 'kotak', harga: 32000, volume: 1000, kapasitas: 1600, tumbuh: 1, susutPct: 3,
+          hppA: [it('Lauk utama (ayam, ikan, daging)', 11000), it('Sayur dan lauk pendamping', 4200), it('Beras', 1800), it('Bumbu dan minyak', 1500)], hppB: [it('Upah masak dan pengemasan', 2500)], hppC: [it('Kotak, sendok, dan plastik', 2300)], hppD: [it('Gas dan transportasi', 1200)] }),
+        unitProduk({ nama: 'Snack box', satuan: 'kotak', harga: 18000, volume: 600, kapasitas: 1200, tumbuh: 1, susutPct: 3,
+          hppA: [it('Kue dan camilan', 7200)], hppB: [it('Upah produksi', 1400)], hppC: [it('Kotak dan kertas', 1900)], hppD: [it('Gas dan transportasi', 600)] }),
+        unitProduk({ nama: 'Prasmanan acara (per porsi)', satuan: 'porsi', harga: 50000, volume: 350, kapasitas: 600, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bahan makanan', 20000)], hppB: [it('Upah juru masak dan pelayan', 5000)], hppC: [it('Peralatan sekali pakai', 3500)], hppD: [it('Sewa tenda dan peralatan saji', 3500)] })],
+      tetap: [it('Pemasaran dan konten', 500000), it('Internet dan perlengkapan', 250000), it('Air dan kebersihan', 300000)],
+      sewa: 2500000, karyawan: 4000000, kendaraan: 1000000, legal: 3000000, listrik: { metode: 'B', daya: 2500, jam: 8, hari: 26, tarif: 1445, tetapLain: 100000 },
+      aset: [{ nama: 'Kompor industri', nilai: 6000000, umur: 48 }, { nama: 'Peralatan masak', nilai: 9000000, umur: 36 }, { nama: 'Freezer', nilai: 8000000, umur: 60 }, { nama: 'Motor box atau kendaraan antar', nilai: 18000000, umur: 60 }, { nama: 'Wadah saji dan perlengkapan acara', nilai: 7000000, umur: 36 }],
+      pemasaran: 2500000, musim: 'kb' });
+  } },
+  { id: 'frozen', jenis: 'kuliner', label: 'Frozen food', build: function () {
+    return mk({ id: 'frozen', jenis: 'kuliner', nama: 'Frozen Food Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Nugget dan sosis', satuan: 'pak', harga: 32000, volume: 700, kapasitas: 1400, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Daging ayam atau ikan', 15000), it('Tepung, bumbu, dan pelapis', 3000)], hppB: [it('Upah produksi', 3000)], hppC: [it('Kemasan pouch dan label', 1800)], hppD: [it('Gas dan es', 800)] }),
+        unitProduk({ nama: 'Dimsum', satuan: 'pak', harga: 28000, volume: 500, kapasitas: 1000, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Daging dan bahan isian', 12000)], hppB: [it('Upah produksi', 3500)], hppC: [it('Kemasan dan label', 1600)], hppD: [it('Gas dan es', 800)] }),
+        unitProduk({ nama: 'Risoles dan lumpia beku', satuan: 'pak', harga: 26000, volume: 400, kapasitas: 800, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Bahan isian dan kulit', 9500)], hppB: [it('Upah produksi', 4000)], hppC: [it('Kemasan dan label', 1500)], hppD: [it('Gas dan es', 700)] })],
+      tetap: [it('Pemasaran dan konten', 600000), it('Internet dan perlengkapan', 250000)],
+      sewa: 1500000, karyawan: 3500000, kendaraan: 600000, market: 7, legal: 3500000, listrik: { metode: 'B', daya: 1200, jam: 24, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Freezer box besar (2 unit)', nilai: 9000000, umur: 60 }, { nama: 'Mesin sealer dan vacuum', nilai: 4500000, umur: 48 }, { nama: 'Mixer dan alat giling', nilai: 6000000, umur: 60 }, { nama: 'Kukusan dan peralatan produksi', nilai: 3000000, umur: 36 }, { nama: 'Cool box dan wadah pengiriman', nilai: 1500000, umur: 24 }],
+      pemasaran: 3000000 });
+  } },
+  { id: 'waralaba', jenis: 'kuliner', label: 'Gerai waralaba (booth minuman dan camilan)', build: function () {
+    return mk({ id: 'waralaba', jenis: 'kuliner', nama: 'Gerai Waralaba Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Minuman utama', satuan: 'cup', harga: 18000, volume: 2000, kapasitas: 3000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bahan paket dari pusat', 5800)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1900)], hppD: [] }),
+        unitProduk({ nama: 'Camilan pendamping', satuan: 'porsi', harga: 12000, volume: 700, kapasitas: 1200, tumbuh: 1, susutPct: 4,
+          hppA: [it('Bahan paket dari pusat', 5400)], hppB: [], hppC: [it('Kemasan', 700)], hppD: [] })],
+      tetap: [it('Internet dan perlengkapan', 250000), it('Pemasaran lokal', 500000), it('Air dan kebersihan', 200000)],
+      sewa: 2500000, karyawan: 4500000, market: 5, legal: 1500000, listrik: { metode: 'B', daya: 1500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Biaya waralaba (hak usaha dan pelatihan)', nilai: 25000000, umur: 60 }, { nama: 'Paket booth dan peralatan dari pusat', nilai: 22000000, umur: 48 }, { nama: 'Sistem kasir (POS) dan perangkat', nilai: 3000000, umur: 36 }],
+      pemasaran: 2000000, lain: [{ nama: 'Royalti waralaba', nilai: 5, jenis: 'persen', produk: 'semua' }, { nama: 'Dana pemasaran bersama', nilai: 2, jenis: 'persen', produk: 'semua' }] });
   } },
   /* ---------------- PETERNAKAN ---------------- */
   { id: 'lele', jenis: 'ternak', label: 'Budidaya lele', build: function () {

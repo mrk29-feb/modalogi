@@ -9,11 +9,11 @@ Dashboard statis untuk menyusun **rencana keuangan** dan **kanvas model bisnis**
 ## Fitur
 
 - **Rencana keuangan** lima langkah (Profil, Produk dan biaya, Modal dan pembiayaan, Asumsi, Hasil), langkah boleh dilewati.
-- **Kelompok usaha**: Jasa, Produksi, Dagang, Peternakan dan budidaya, Pertanian, dan Usaha campuran. Tiap kelompok punya beberapa usaha spesifik dengan komponen biaya contoh (angka hanya ilustrasi), atau Lainnya (mulai kosong). Semua komponen bisa dihapus, diganti, dan ditambah. Biaya lain bisa ditambah manual.
+- **Kelompok usaha**: Jasa, Produksi, Dagang, Kuliner dan waralaba, Peternakan dan budidaya, Pertanian, dan Usaha campuran. Tiap kelompok punya beberapa usaha spesifik dengan komponen biaya contoh (angka hanya ilustrasi), atau Lainnya (mulai kosong). Semua komponen bisa dihapus, diganti, dan ditambah. Biaya lain bisa ditambah manual.
 - **Hasil**: titik impas, laba rugi dan arus kas 12 bulan, kelayakan (ROI, balik modal, NPV pada tiga diskonto, indeks profitabilitas, IRR), sensitivitas dan skenario, pembiayaan (angsuran, DSCR, akad bagi hasil).
 - **Skema syariah**: akad (dikelola langsung, mudharabah, musyarakah), nisbah, wakaf, murabahah, ijarah, dan **Kalender Berkah**. Tampilan memakai pola bintang geometris. Skema konvensional memakai pinjaman anuitas atau flat dan pola titik.
 - **Kanvas**: BMC Syariah (KUBAH, 14 kotak), BMC konvensional, dan Lean Canvas, dengan tombol **Ambil angka** dari rencana keuangan.
-- **Excel**: unduh template yang bentuknya menyesuaikan usaha dan jumlah produk (rumus terkunci tanpa kata sandi, baris cadangan), unggah kembali untuk dianalisis, dan unduh laporan Excel.
+- **Excel**: unduh template yang bentuknya menyesuaikan usaha, jumlah produk, dan skema (template syariah hanya memuat akad, nisbah, dan Kalender Berkah; template konvensional hanya memuat pinjaman). Isian yang tidak berlaku otomatis abu-abu dan menolak isian tanpa makro, isian wajib yang kosong berwarna kuning lembut dan dihitung di sel E3 lembar Input (rumus terkunci tanpa kata sandi, baris cadangan), unggah kembali untuk dianalisis, dan unduh laporan Excel.
 - **PDF**: laporan hasil dan kanvas.
 - Semua berkas Excel dan PDF memuat atribusi **mrk29** dan **Modalogi** di metadata dan di dalam berkas.
 

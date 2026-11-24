@@ -750,6 +750,7 @@ var JENIS = [
   { id: 'jasa', label: 'Jasa', ikon: 'ti-tools', ket: 'Laundry, bengkel, salon, percetakan', satuanContoh: 'per layanan' },
   { id: 'produksi', label: 'Produksi', ikon: 'ti-building-factory-2', ket: 'Roti, konveksi, olahan pangan, kerajinan', satuanContoh: 'per buah' },
   { id: 'dagang', label: 'Dagang', ikon: 'ti-shopping-cart', ket: 'Kelontong, kedai, toko pakaian', satuanContoh: '' },
+  { id: 'kuliner', label: 'Kuliner dan waralaba', ikon: 'ti-coffee', ket: 'Coffeeshop, minuman kekinian, ayam geprek, katering, waralaba', satuanContoh: 'per porsi' },
   { id: 'ternak', label: 'Peternakan dan budidaya', ikon: 'ti-fish', ket: 'Lele, ayam, kambing', satuanContoh: 'kg' },
   { id: 'tani', label: 'Pertanian', ikon: 'ti-plant-2', ket: 'Hidroponik, padi, sayuran', satuanContoh: 'kg' },
   { id: 'campuran', label: 'Usaha campuran', ikon: 'ti-layers', ket: 'Gabungan barang, jasa, dagang, siklus', satuanContoh: '' }
@@ -926,6 +927,89 @@ var PRESETS = [
       sewa: 2000000, karyawan: 2200000, market: 6,
       aset: [{ nama: 'Rak dan manekin', nilai: 6000000, umur: 48 }, { nama: 'Kamera dan lampu foto', nilai: 5000000, umur: 36 }],
       pemasaran: 1500000, lain: [{ nama: 'Kemasan dan pengiriman', nilai: 3, jenis: 'persen', produk: 'semua' }], musim: 'kb' });
+  } },
+  /* ---------------- KULINER DAN WARALABA ---------------- */
+  { id: 'coffeeshop', jenis: 'kuliner', label: 'Coffeeshop', build: function () {
+    return mk({ id: 'coffeeshop', jenis: 'kuliner', nama: 'Coffeeshop Contoh', pangan: true, status: 'Berjalan kurang dari 1 tahun',
+      produk: [
+        unitProduk({ nama: 'Kopi susu dan kopi kekinian', satuan: 'cup', harga: 22000, volume: 1700, kapasitas: 3000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Biji kopi', 2400), it('Susu segar dan creamer', 4300), it('Gula aren dan sirup', 1600), it('Es batu dan air', 300)], hppB: [], hppC: [it('Cup, tutup, dan sedotan', 1900), it('Stiker dan kantong bawa', 350)], hppD: [] }),
+        unitProduk({ nama: 'Kopi klasik (espresso, americano, latte, V60)', satuan: 'cup', harga: 26000, volume: 650, kapasitas: 1200, tumbuh: 1, susutPct: 3,
+          hppA: [it('Biji kopi pilihan', 4200), it('Susu', 2500), it('Gula dan sirup', 700), it('Air dan es', 250)], hppB: [], hppC: [it('Gelas atau cup dan tutup', 1700)], hppD: [it('Filter kertas dan bahan seduh lain', 300)] }),
+        unitProduk({ nama: 'Non-kopi (matcha, cokelat, teh)', satuan: 'cup', harga: 25000, volume: 500, kapasitas: 1000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bubuk matcha, cokelat, atau teh', 4800), it('Susu', 3300), it('Sirup dan gula', 1300), it('Es batu', 300)], hppB: [], hppC: [it('Cup, tutup, dan sedotan', 1900)], hppD: [] }),
+        unitProduk({ nama: 'Makanan pendamping (roti, pastry, camilan)', satuan: 'porsi', harga: 20000, volume: 450, kapasitas: 800, tumbuh: 1, susutPct: 5,
+          hppA: [it('Bahan atau barang titipan', 9800)], hppB: [], hppC: [it('Kemasan dan serbet', 800)], hppD: [] })],
+      tetap: [it('Pemeliharaan dan servis mesin', 350000), it('Pemasaran dan konten', 800000), it('Internet, musik, dan perlengkapan', 400000), it('Air galon, kebersihan, dan keamanan', 350000)],
+      sewa: 8000000, karyawan: 8500000, market: 6, legal: 3500000, listrik: { metode: 'B', daya: 6500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Mesin espresso', nilai: 38000000, umur: 60 }, { nama: 'Grinder', nilai: 9000000, umur: 48 }, { nama: 'Blender dan peralatan bar', nilai: 6000000, umur: 36 }, { nama: 'Kulkas, chiller, dan ice maker', nilai: 14000000, umur: 60 }, { nama: 'Furnitur dan dekorasi', nilai: 28000000, umur: 48 }, { nama: 'Renovasi dan interior', nilai: 35000000, umur: 60 }, { nama: 'Sistem kasir (POS) dan perangkat', nilai: 5000000, umur: 36 }],
+      pemasaran: 6000000, lain: [{ nama: 'Biaya pembayaran digital (QRIS)', nilai: 0.7, jenis: 'persen', produk: 'semua' }] });
+  } },
+  { id: 'kekinian', jenis: 'kuliner', label: 'Minuman kekinian (boba, teh buah)', build: function () {
+    return mk({ id: 'kekinian', jenis: 'kuliner', nama: 'Minuman Kekinian Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Milk tea dan boba', satuan: 'cup', harga: 15000, volume: 2200, kapasitas: 3500, tumbuh: 1.5, susutPct: 3,
+          hppA: [it('Teh, susu, dan creamer', 2600), it('Boba dan topping', 2200), it('Sirup dan gula', 900), it('Es batu', 250)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1700)], hppD: [] }),
+        unitProduk({ nama: 'Teh buah dan minuman segar', satuan: 'cup', harga: 13000, volume: 1200, kapasitas: 2000, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Teh', 700), it('Buah dan sirup buah', 2300), it('Gula', 500), it('Es batu', 250)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1600)], hppD: [] })],
+      tetap: [it('Internet dan perlengkapan', 250000), it('Pemasaran rutin', 600000), it('Air dan kebersihan', 200000)],
+      sewa: 2500000, karyawan: 5500000, market: 5, legal: 1500000, listrik: { metode: 'B', daya: 1500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Booth atau gerobak', nilai: 12000000, umur: 36 }, { nama: 'Sealer, blender, dan dispenser', nilai: 6000000, umur: 36 }, { nama: 'Kulkas dan freezer', nilai: 6000000, umur: 48 }, { nama: 'Sistem kasir (POS)', nilai: 3000000, umur: 36 }],
+      pemasaran: 3000000 });
+  } },
+  { id: 'geprek', jenis: 'kuliner', label: 'Ayam geprek dan makanan cepat saji', build: function () {
+    return mk({ id: 'geprek', jenis: 'kuliner', nama: 'Ayam Geprek Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Paket ayam geprek dan nasi', satuan: 'porsi', harga: 18000, volume: 2800, kapasitas: 4000, tumbuh: 1, susutPct: 4,
+          hppA: [it('Ayam potong', 6800), it('Tepung dan bumbu crispy', 1300), it('Cabai dan bawang untuk sambal', 1900), it('Beras untuk nasi', 1800), it('Minyak goreng', 1300)], hppB: [], hppC: [it('Boks, sendok, dan plastik', 1400)], hppD: [it('Gas', 450)] }),
+        unitProduk({ nama: 'Menu tambahan (mie, tahu-tempe, camilan)', satuan: 'porsi', harga: 9000, volume: 1200, kapasitas: 2000, tumbuh: 1, susutPct: 4,
+          hppA: [it('Bahan baku', 4400)], hppB: [], hppC: [it('Kemasan', 700)], hppD: [it('Gas', 200)] }),
+        unitProduk({ nama: 'Minuman (es teh, es jeruk)', satuan: 'cup', harga: 5000, volume: 2400, kapasitas: 3600, tumbuh: 1, susutPct: 2,
+          hppA: [it('Teh, jeruk, gula, dan es', 1200)], hppB: [], hppC: [it('Cup dan sedotan', 700)], hppD: [] })],
+      tetap: [it('Pemasaran rutin', 500000), it('Internet dan perlengkapan', 300000), it('Air dan kebersihan', 300000)],
+      sewa: 3000000, karyawan: 5500000, market: 6, legal: 1500000, listrik: { metode: 'B', daya: 2000, jam: 10, hari: 26, tarif: 1445, tetapLain: 100000 },
+      aset: [{ nama: 'Kompor gas dan wajan', nilai: 5000000, umur: 36 }, { nama: 'Freezer dan chiller', nilai: 8000000, umur: 60 }, { nama: 'Etalase, meja, dan kursi', nilai: 9000000, umur: 48 }, { nama: 'Peralatan dapur', nilai: 3500000, umur: 24 }, { nama: 'Sistem kasir (POS)', nilai: 3000000, umur: 36 }],
+      pemasaran: 3000000, lain: [{ nama: 'Biaya pembayaran digital (QRIS)', nilai: 0.7, jenis: 'persen', produk: 'semua' }] });
+  } },
+  { id: 'katering', jenis: 'kuliner', label: 'Katering dan dapur rumahan', build: function () {
+    return mk({ id: 'katering', jenis: 'kuliner', nama: 'Katering Contoh', skema: 'syariah', pangan: true, status: 'Berjalan kurang dari 1 tahun', periodeAwal: 1,
+      produk: [
+        unitProduk({ nama: 'Nasi kotak', satuan: 'kotak', harga: 32000, volume: 1000, kapasitas: 1600, tumbuh: 1, susutPct: 3,
+          hppA: [it('Lauk utama (ayam, ikan, daging)', 11000), it('Sayur dan lauk pendamping', 4200), it('Beras', 1800), it('Bumbu dan minyak', 1500)], hppB: [it('Upah masak dan pengemasan', 2500)], hppC: [it('Kotak, sendok, dan plastik', 2300)], hppD: [it('Gas dan transportasi', 1200)] }),
+        unitProduk({ nama: 'Snack box', satuan: 'kotak', harga: 18000, volume: 600, kapasitas: 1200, tumbuh: 1, susutPct: 3,
+          hppA: [it('Kue dan camilan', 7200)], hppB: [it('Upah produksi', 1400)], hppC: [it('Kotak dan kertas', 1900)], hppD: [it('Gas dan transportasi', 600)] }),
+        unitProduk({ nama: 'Prasmanan acara (per porsi)', satuan: 'porsi', harga: 50000, volume: 350, kapasitas: 600, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bahan makanan', 20000)], hppB: [it('Upah juru masak dan pelayan', 5000)], hppC: [it('Peralatan sekali pakai', 3500)], hppD: [it('Sewa tenda dan peralatan saji', 3500)] })],
+      tetap: [it('Pemasaran dan konten', 500000), it('Internet dan perlengkapan', 250000), it('Air dan kebersihan', 300000)],
+      sewa: 2500000, karyawan: 4000000, kendaraan: 1000000, legal: 3000000, listrik: { metode: 'B', daya: 2500, jam: 8, hari: 26, tarif: 1445, tetapLain: 100000 },
+      aset: [{ nama: 'Kompor industri', nilai: 6000000, umur: 48 }, { nama: 'Peralatan masak', nilai: 9000000, umur: 36 }, { nama: 'Freezer', nilai: 8000000, umur: 60 }, { nama: 'Motor box atau kendaraan antar', nilai: 18000000, umur: 60 }, { nama: 'Wadah saji dan perlengkapan acara', nilai: 7000000, umur: 36 }],
+      pemasaran: 2500000, musim: 'kb' });
+  } },
+  { id: 'frozen', jenis: 'kuliner', label: 'Frozen food', build: function () {
+    return mk({ id: 'frozen', jenis: 'kuliner', nama: 'Frozen Food Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Nugget dan sosis', satuan: 'pak', harga: 32000, volume: 700, kapasitas: 1400, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Daging ayam atau ikan', 15000), it('Tepung, bumbu, dan pelapis', 3000)], hppB: [it('Upah produksi', 3000)], hppC: [it('Kemasan pouch dan label', 1800)], hppD: [it('Gas dan es', 800)] }),
+        unitProduk({ nama: 'Dimsum', satuan: 'pak', harga: 28000, volume: 500, kapasitas: 1000, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Daging dan bahan isian', 12000)], hppB: [it('Upah produksi', 3500)], hppC: [it('Kemasan dan label', 1600)], hppD: [it('Gas dan es', 800)] }),
+        unitProduk({ nama: 'Risoles dan lumpia beku', satuan: 'pak', harga: 26000, volume: 400, kapasitas: 800, tumbuh: 1.5, susutPct: 4,
+          hppA: [it('Bahan isian dan kulit', 9500)], hppB: [it('Upah produksi', 4000)], hppC: [it('Kemasan dan label', 1500)], hppD: [it('Gas dan es', 700)] })],
+      tetap: [it('Pemasaran dan konten', 600000), it('Internet dan perlengkapan', 250000)],
+      sewa: 1500000, karyawan: 3500000, kendaraan: 600000, market: 7, legal: 3500000, listrik: { metode: 'B', daya: 1200, jam: 24, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Freezer box besar (2 unit)', nilai: 9000000, umur: 60 }, { nama: 'Mesin sealer dan vacuum', nilai: 4500000, umur: 48 }, { nama: 'Mixer dan alat giling', nilai: 6000000, umur: 60 }, { nama: 'Kukusan dan peralatan produksi', nilai: 3000000, umur: 36 }, { nama: 'Cool box dan wadah pengiriman', nilai: 1500000, umur: 24 }],
+      pemasaran: 3000000 });
+  } },
+  { id: 'waralaba', jenis: 'kuliner', label: 'Gerai waralaba (booth minuman dan camilan)', build: function () {
+    return mk({ id: 'waralaba', jenis: 'kuliner', nama: 'Gerai Waralaba Contoh', pangan: true, status: 'Rintisan baru',
+      produk: [
+        unitProduk({ nama: 'Minuman utama', satuan: 'cup', harga: 18000, volume: 2000, kapasitas: 3000, tumbuh: 1, susutPct: 3,
+          hppA: [it('Bahan paket dari pusat', 5800)], hppB: [], hppC: [it('Cup, seal, dan sedotan', 1900)], hppD: [] }),
+        unitProduk({ nama: 'Camilan pendamping', satuan: 'porsi', harga: 12000, volume: 700, kapasitas: 1200, tumbuh: 1, susutPct: 4,
+          hppA: [it('Bahan paket dari pusat', 5400)], hppB: [], hppC: [it('Kemasan', 700)], hppD: [] })],
+      tetap: [it('Internet dan perlengkapan', 250000), it('Pemasaran lokal', 500000), it('Air dan kebersihan', 200000)],
+      sewa: 2500000, karyawan: 4500000, market: 5, legal: 1500000, listrik: { metode: 'B', daya: 1500, jam: 12, hari: 30, tarif: 1445, tetapLain: 0 },
+      aset: [{ nama: 'Biaya waralaba (hak usaha dan pelatihan)', nilai: 25000000, umur: 60 }, { nama: 'Paket booth dan peralatan dari pusat', nilai: 22000000, umur: 48 }, { nama: 'Sistem kasir (POS) dan perangkat', nilai: 3000000, umur: 36 }],
+      pemasaran: 2000000, lain: [{ nama: 'Royalti waralaba', nilai: 5, jenis: 'persen', produk: 'semua' }, { nama: 'Dana pemasaran bersama', nilai: 2, jenis: 'persen', produk: 'semua' }] });
   } },
   /* ---------------- PETERNAKAN ---------------- */
   { id: 'lele', jenis: 'ternak', label: 'Budidaya lele', build: function () {
@@ -1215,6 +1299,7 @@ function produkRows(R, rpf, pcf) {
 }
 
 var ICONS = {
+'ti-coffee':'<path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.500a2.500 2.500 0 0 1 0 5H17M7 3v2M11 3v2M14 3v2"/>',
 'ti-layers':'<path d="M12 4l9 5-9 5-9-5z"/><path d="M3 14l9 5 9-5"/>',
 'ti-pencil':'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
 'ti-file-spreadsheet':'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8 13h8M8 17h8M12 11v8"/>',
@@ -1433,7 +1518,7 @@ function templateCard() {
 }
 function renderBeranda() {
   var v = $('#v-beranda'); v.innerHTML = '';
-  var pick = ['laundry', 'bengkel', 'roti', 'konveksi', 'kelontong', 'lele', 'hidroponik', 'warunglaundry'];
+  var pick = ['laundry', 'bengkel', 'coffeeshop', 'roti', 'konveksi', 'kelontong', 'lele', 'hidroponik', 'warunglaundry'];
   var chips = PRESETS.filter(function (p) { return pick.indexOf(p.id) >= 0; }).map(function (p) { var j = JENIS.filter(function (x) { return x.id === p.jenis; })[0]; return el('button', { class: 'chip', type: 'button', onclick: function () { loadPreset(p.id); go('rencana'); } }, [ico(j.ikon), p.label]); });
   var fin = el('input', { type: 'file', accept: '.xlsx', style: 'display:none', id: 'fileIn', 'aria-label': 'Unggah berkas Excel' });
   fin.addEventListener('change', function () { handleUpload(fin.files[0]); fin.value = ''; });
@@ -1444,11 +1529,7 @@ function renderBeranda() {
   ['dragleave', 'drop'].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.remove('on'); }); });
   drop.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; handleUpload(f); });
   v.appendChild(el('div', { class: 'wrap' }, [
-    el('div', { class: 'hero' }, [
-      el('h1', { text: 'Clear plans, clearer numbers.' }),
-      el('p', { class: 'lead', text: 'Rancang rencana usaha dari harga pokok, titik impas, arus kas, sampai kelayakan dan kanvas model bisnis. Bisa syariah, bisa konvensional, untuk jasa, produksi, dagang, peternakan, pertanian, dan usaha campuran.' })
-    ]),
-    el('div', { class: 'grid g3', style: 'margin-top:22px' }, [
+    el('div', { class: 'grid g3' }, [
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-pencil')]), el('h3', { text: 'Isi langsung' }), el('p', { class: 'muted small', text: 'Jawab lima langkah singkat. Hasil dihitung saat itu juga, tanpa mengirim data ke mana pun.' }), el('button', { class: 'btn pri', type: 'button', onclick: function () { go('rencana'); } }, ['Mulai merencanakan', ico('ti-arrow-right')])])]),
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-file-spreadsheet')]), el('h3', { text: 'Unduh template Excel' }), el('p', { class: 'muted small', text: 'Bentuknya menyesuaikan usaha dan jumlah produk. Rumus terkunci, siap diisi di Excel.' }), templateCard()])]),
       el('div', { class: 'card' }, [el('div', { class: 'path' }, [el('div', { class: 'ic' }, [ico('ti-upload')]), el('h3', { text: 'Unggah Excel' }), el('p', { class: 'muted small', text: 'Unggah template yang sudah diisi (atau laporan Modalogi). Dashboard membacanya dan langsung menampilkan hasil.' }), drop, fin])])
@@ -1460,7 +1541,7 @@ function renderBeranda() {
     el('div', { class: 'grid g3', style: 'margin-top:14px' }, [
       el('div', { class: 'card tight' }, [el('h4', { text: 'Syariah atau konvensional' }), el('p', { class: 'muted small', text: 'Akad, nisbah, dan Kalender Berkah untuk skema syariah. Pinjaman dan bunga untuk konvensional.' })]),
       el('div', { class: 'card tight' }, [el('h4', { text: 'Fleksibel untuk banyak usaha' }), el('p', { class: 'muted small', text: 'Belasan contoh usaha, satu sampai sepuluh produk, usaha campuran, usaha bersiklus panen, dan biaya lain yang bisa ditambah sendiri.' })]),
-      el('div', { class: 'card tight' }, [el('h4', { text: 'Data tetap di perangkat' }), el('p', { class: 'muted small', text: 'Seluruh hitungan berjalan di peramban Bapak. Tidak ada akun dan tidak ada pengiriman data.' })])
+      el('div', { class: 'card tight' }, [el('h4', { text: 'Data tetap di perangkat' }), el('p', { class: 'muted small', text: 'Seluruh hitungan berjalan di peramban Anda. Tidak ada akun dan tidak ada pengiriman data.' })])
     ])
   ]));
 }
@@ -1540,10 +1621,10 @@ function stepProfil() {
   var wrap = el('div', { class: 'stack' }, [
     section('Tentang usaha', 'Isian singkat. Sisanya bisa diisi bertahap.', [
       grid('g2', [textField(U, 'nama', { label: 'Nama usaha', ph: 'Misalnya: Laundry Berkah' }), selField(U, 'bulanMulai', MONTHS.map(function (m, i) { return { v: i, l: m }; }), { label: 'Bulan mulai beroperasi', num: true, hint: 'Hanya untuk label bulan di tabel.' })])]),
-    section('Kelompok usaha', 'Menentukan bentuk isian di langkah berikutnya. Bila usaha Bapak gabungan, pilih Usaha campuran.', [el('div', { class: 'grid af' }, jbtn)]),
+    section('Kelompok usaha', 'Menentukan bentuk isian di langkah berikutnya. Bila usaha Anda gabungan, pilih Usaha campuran.', [el('div', { class: 'grid af' }, jbtn)]),
     section('Usaha spesifik', 'Pilih yang paling dekat untuk mendapat komponen biaya yang relevan, atau mulai kosong. Semua komponen bisa dihapus, diganti, dan ditambah. Angka contoh hanya ilustrasi.', [
       el('div', { class: 'chips' }, spes),
-      U.preset === 'kosong' ? el('div', { style: 'margin-top:12px;max-width:420px' }, [textField(U, 'usahaLain', { label: 'Jenis usaha Bapak (opsional)', ph: 'Misalnya: Bengkel las, jasa fotografi', hint: 'Dicantumkan di hasil dan laporan.' })]) : null]),
+      U.preset === 'kosong' ? el('div', { style: 'margin-top:12px;max-width:420px' }, [textField(U, 'usahaLain', { label: 'Jenis usaha Anda (opsional)', ph: 'Misalnya: Bengkel las, jasa fotografi', hint: 'Dicantumkan di hasil dan laporan.' })]) : null]),
     section('Skema dan status', null, [
       el('div', { class: 'row' }, [el('div', [el('div', { class: 't small muted', style: 'margin-bottom:4px', text: 'Skema' }), segField(U, 'skema', [{ v: 'syariah', l: 'Syariah' }, { v: 'konvensional', l: 'Konvensional' }], { aria: 'Skema', onchange: function () { onSkema(); }, rerender: function () { renderStep(); } })])]),
       el('p', { class: 'hint', text: U.skema === 'syariah' ? 'Syariah: pilihan akad dan nisbah, pembiayaan murabahah atau ijarah, dan Kalender Berkah sebagai pola musim.' : 'Konvensional: pembiayaan berupa pinjaman dengan bunga. Pola musim bisa diatur sendiri.' }),
@@ -1560,7 +1641,7 @@ function onSkema() {
 /* ---------- Langkah 2: Produk dan biaya ---------- */
 function productCard(p, i) {
   var j = U.jenis, tp = tipeOf(U, p), card = el('div', { class: 'pcard' });
-  var label = tp === 'omzet' ? 'Kategori' : (tp === 'batch' ? 'Komoditas' : (j === 'jasa' ? 'Layanan' : 'Produk'));
+  var label = tp === 'omzet' ? 'Kategori' : (tp === 'batch' ? 'Komoditas' : (j === 'jasa' ? 'Layanan' : (j === 'kuliner' ? 'Menu' : 'Produk')));
   var head = el('div', { class: 'ph' }, [el('span', { class: 'num', text: String(i + 1) }), j === 'campuran' ? el('span', { class: 'tag', text: tp === 'omzet' ? 'Dagang' : (tp === 'batch' ? 'Bersiklus' : 'Barang atau jasa') }) : null, el('div', { style: 'flex:1' }, [textField(p, 'nama', { ph: 'Nama ' + label.toLowerCase(), aria: 'Nama ' + label.toLowerCase(), onchange: function () { } })]),
     U.produk.length > 1 ? el('button', { type: 'button', class: 'x', 'aria-label': 'Hapus ' + label.toLowerCase(), onclick: function () { U.produk.splice(i, 1); fixBiayaLainRef(); change(); renderStep(); } }, [ico('ti-trash')]) : null]);
   card.appendChild(head);
@@ -1575,7 +1656,7 @@ function productCard(p, i) {
       return '<div class="sumline"><span>Hasil bersih per batch <b>' + dec(q.batch.hasilNet, 0) + ' ' + esc(q.satuan) + '</b> · Biaya per batch <b>' + rp(q.batch.biayaTotal) + '</b></span><span>Selisih per batch <b style="color:' + (lb >= 0 ? '#0B6B4F' : '#7E2D1A') + '">' + rp(lb) + '</b>' + (first ? ' · Panen pertama bulan ke-' + first : '') + '</span></div>';
     }, ''));
   } else {
-    card.appendChild(grid('g3', [textField(p, 'satuan', { label: 'Satuan', ph: 'kg, buah, porsi' }), rpField(p, 'harga', { label: 'Harga jual per satuan' }), numField(p, 'volume', { label: 'Volume per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Rata-rata di luar pengaruh musim.' }), numField(p, 'kapasitas', { label: 'Kapasitas per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Opsional. Volume dibatasi kapasitas.' }), numField(p, 'tumbuh', { label: 'Pertumbuhan per bulan', suf: '%' }), (j === 'produksi' || j === 'campuran') ? numField(p, 'susutPct', { label: 'Susut bahan', suf: '%', hint: 'Tambahan biaya bahan.' }) : null]));
+    card.appendChild(grid('g3', [textField(p, 'satuan', { label: 'Satuan', ph: 'kg, buah, porsi' }), rpField(p, 'harga', { label: 'Harga jual per satuan' }), numField(p, 'volume', { label: 'Volume per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Rata-rata di luar pengaruh musim.' }), numField(p, 'kapasitas', { label: 'Kapasitas per bulan', suf: p.satuan || 'unit', rp: false, hint: 'Opsional. Volume dibatasi kapasitas.' }), numField(p, 'tumbuh', { label: 'Pertumbuhan per bulan', suf: '%' }), (j === 'produksi' || j === 'campuran' || j === 'kuliner') ? numField(p, 'susutPct', { label: 'Susut bahan', suf: '%', hint: 'Tambahan biaya bahan.' }) : null]));
     [['hppA', 'Bahan baku dan barang dagangan'], ['hppB', 'Tenaga kerja langsung'], ['hppC', 'Kemasan dan bahan pendukung'], ['hppD', 'Biaya langsung lain']].forEach(function (g) {
       card.appendChild(el('div', { class: 'grp' }, [el('h4', { text: g[1] + ' (per satuan)' }), itemList(p[g[0]], { namePh: 'Nama komponen', addLabel: 'Tambah komponen' })]));
     });
@@ -1630,7 +1711,7 @@ function stepProduk() {
     plist.appendChild(el('div', { class: 'row' }, btns.concat([el('span', { class: 'small muted', text: U.produk.length + ' dari 10' })])));
   }
   drawP();
-  var sub = U.jenis === 'campuran' ? 'Setiap kartu bisa berbeda jenisnya: barang atau jasa, dagangan per kategori, atau usaha bersiklus. Tambahkan sesuai lini usaha Bapak.' : U.jenis === 'dagang' ? 'Dagang diisi per kategori, bukan per barang. Cukup penjualan, margin, dan perputaran stok.' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Usaha bersiklus: biaya keluar lebih dulu, hasil masuk saat panen. Atur panjang siklus dan jumlah batch bergilir.' : 'Satu sampai sepuluh produk. Bila hanya satu, cukup isi satu kartu.');
+  var sub = U.jenis === 'campuran' ? 'Setiap kartu bisa berbeda jenisnya: barang atau jasa, dagangan per kategori, atau usaha bersiklus. Tambahkan sesuai lini usaha Anda.' : U.jenis === 'dagang' ? 'Dagang diisi per kategori, bukan per barang. Cukup penjualan, margin, dan perputaran stok.' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Usaha bersiklus: biaya keluar lebih dulu, hasil masuk saat panen. Atur panjang siklus dan jumlah batch bergilir.' : 'Satu sampai sepuluh produk. Bila hanya satu, cukup isi satu kartu.');
   wrap.appendChild(section((U.jenis === 'dagang' ? 'Kategori dagangan' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'Komoditas dan siklus' : (U.jenis === 'campuran' ? 'Lini usaha' : 'Produk dan biaya per satuan'))) + ' · ' + usahaLabel(U), sub, [plist]));
   wrap.appendChild(section('Biaya tetap per bulan', 'Dibayar walau tidak ada penjualan. Jawab pertanyaan berikut, hanya yang Ya akan memunculkan isian.', [
     itemList(U.biayaTetap, { namePh: 'Misalnya: upah pengelola, perawatan', addLabel: 'Tambah biaya tetap' }),
@@ -1718,7 +1799,7 @@ function stepAsumsi() {
     mbox.innerHTML = '';
     var opts = [{ v: 'tanpa', l: 'Tanpa musim' }, { v: 'kb', l: 'Kalender Berkah' }, { v: 'sendiri', l: 'Pola sendiri' }];
     mbox.appendChild(el('div', { class: 'row' }, [segField(M, 'mode', opts, { aria: 'Pola musim', rerender: drawM })]));
-    mbox.appendChild(el('p', { class: 'hint', style: 'margin:8px 0 10px', text: M.mode === 'tanpa' ? 'Pendapatan dianggap merata tiap bulan.' : (M.mode === 'kb' ? 'Dua belas periode berbasis kalender hijriah dan kegiatan lembaga. Tingkat tiap periode bisa diubah. Pengali dinormalkan agar rata-ratanya 1,00.' : 'Dua belas bulan operasi dengan tingkat permintaan yang Bapak tentukan. Pengali dinormalkan agar rata-ratanya 1,00.') }));
+    mbox.appendChild(el('p', { class: 'hint', style: 'margin:8px 0 10px', text: M.mode === 'tanpa' ? 'Pendapatan dianggap merata tiap bulan.' : (M.mode === 'kb' ? 'Dua belas periode berbasis kalender hijriah dan kegiatan lembaga. Tingkat tiap periode bisa diubah. Pengali dinormalkan agar rata-ratanya 1,00.' : 'Dua belas bulan operasi dengan tingkat permintaan yang Anda tentukan. Pengali dinormalkan agar rata-ratanya 1,00.') }));
     if (M.mode === 'tanpa') return;
     var arrT = M.mode === 'kb' ? M.tingkatKB : M.tingkatSendiri;
     var names = M.mode === 'kb' ? KB_PERIODE : MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); });
@@ -1733,9 +1814,9 @@ function stepAsumsi() {
     mbox.appendChild(liveText('div', function () { return R ? '<div style="margin-top:12px">' + heatStrip(R.musim.mult, MONTHS.map(function (m, i) { return 'Bln ' + (i + 1); })) + '<div class="hint" style="margin-top:6px">Pengali musim per bulan operasi (rata-rata ' + dec(R.musim.avg, 2) + ').</div></div>' : ''; }));
   }
   drawM();
-  wrap.appendChild(section('Pola musim', U.skema === 'syariah' ? 'Kalender Berkah menyesuaikan volume dengan ritme musim. Bisa dipakai juga untuk usaha non-syariah.' : 'Atur ritme musim bila usaha Bapak punya bulan ramai dan sepi.', [mbox]));
+  wrap.appendChild(section('Pola musim', U.skema === 'syariah' ? 'Kalender Berkah menyesuaikan volume dengan ritme musim. Bisa dipakai juga untuk usaha non-syariah.' : 'Atur ritme musim bila usaha Anda punya bulan ramai dan sepi.', [mbox]));
   var rf = el('div'); var Rr = U.ref;
-  rf.appendChild(el('div', { class: 'note', style: 'margin-bottom:12px', text: 'Parameter standar per Okt 2026. Ubah hanya bila Bapak punya data yang lebih baru atau lebih tepat.' }));
+  rf.appendChild(el('div', { class: 'note', style: 'margin-bottom:12px', text: 'Parameter standar per Okt 2026. Ubah hanya bila Anda punya data yang lebih baru atau lebih tepat.' }));
   rf.appendChild(grid('g3', [numField(Rr, 'inflasiUmum', { label: 'Inflasi umum per tahun', suf: '%' }), numField(Rr, 'inflasiPangan', { label: 'Inflasi bahan pangan per tahun', suf: '%' }), numField(Rr, 'pph', { label: 'PPh final atas penjualan', suf: '%', hint: 'Tarif UMKM yang berlaku saat ini.' }), numField(Rr, 'dTinggi', { label: 'Tambahan diskonto skenario tinggi', suf: 'poin %' }), numField(Rr, 'dSangatTinggi', { label: 'Tambahan diskonto sangat tinggi', suf: 'poin %' }), numField(Rr, 'kasMinBulan', { label: 'Target kas minimum', suf: 'bln biaya', rp: false }), numField(Rr, 'amortBulan', { label: 'Masa amortisasi izin', suf: 'bln', rp: false })]));
   rf.appendChild(el('button', { class: 'btn sm', style: 'margin-top:12px', type: 'button', onclick: function () { U.ref = baseU().ref; change(); renderStep(); toast('Parameter dikembalikan ke nilai standar.'); } }, [ico('ti-refresh'), 'Kembalikan ke standar']));
   wrap.appendChild(section('Parameter standar', 'Inflasi, pajak, dan diskonto. Sudah terisi.', [rf]));
@@ -1962,7 +2043,7 @@ function renderTentang() {
       el('li', { text: 'Kelayakan memakai ROI, waktu balik modal, NPV pada tiga tingkat diskonto, indeks profitabilitas, dan IRR. Tahun ke-2 dan seterusnya diekstrapolasi hingga lima tahun.' }),
       el('li', { text: 'Usaha bersiklus (ternak, tani) memakai batch bergilir: biaya keluar selama siklus, hasil masuk saat panen.' })])]),
     el('div', { class: 'card', style: 'margin-top:12px' }, [el('h3', { text: 'Bekerja dengan Excel' }), el('ul', { class: 'small', style: 'margin:8px 0 0 18px;line-height:1.7' }, [
-      el('li', { text: 'Unduh template di Beranda. Bentuknya menyesuaikan kelompok usaha, usaha spesifik, dan jumlah produk yang Bapak pilih, lengkap dengan baris cadangan untuk komponen tambahan.' }),
+      el('li', { text: 'Unduh template di Beranda. Bentuknya menyesuaikan kelompok usaha, usaha spesifik, dan jumlah produk, serta skema (syariah atau konvensional) yang Anda pilih, lengkap dengan baris cadangan untuk komponen tambahan. Isian yang tidak berlaku untuk pilihan Anda otomatis abu-abu, dan isian wajib yang kosong dihitung di bagian atas lembar Input.' }),
       el('li', { text: 'Isi sel berlatar biru muda. Lembar lain terkunci tanpa kata sandi agar rumus tidak rusak.' }),
       el('li', { text: 'Unggah kembali di Beranda. Modalogi membaca isian lewat nama rentang dan lembar meta tersembunyi, lalu menampilkan analisis lengkap.' }),
       el('li', { text: 'Laporan Excel dari tab Hasil memuat isian yang sama, sehingga bisa diunggah ulang untuk dilanjutkan.' })])]),
@@ -2015,38 +2096,56 @@ var XL = (function () {
   function F(path, label, type, opts, hint) { return { k: 'field', path: path, label: label, type: type, opts: opts, hint: hint }; }
   function L(path, cols, min, extra, hint) { return { k: 'list', path: path, cols: cols, min: min || 6, extra: extra || 4, hint: hint }; }
   function Ar(path, labels, opts) { return { k: 'arr', path: path, labels: labels, opts: opts }; }
+  /* dep: daftar syarat (semua harus terpenuhi): {p: jalur isian, is: [label]} atau {p, not: [label]}. req: wajib terisi bila syarat terpenuhi. */
+  function D(item, dep, req) { item.dep = dep || null; item.req = !!req; return item; }
+  function RQ(item) { return D(item, null, true); }
+  var ON = function (p) { return { p: p, is: ['Ya'] }; };
   function schemaOf(U) {
     var S = [], j = U.jenis, syr = U.skema === 'syariah';
-    S.push({ sec: 'Profil usaha', items: [F('nama', 'Nama usaha', 'text'), F('skema', 'Skema', 'sel', O.skema), F('status', 'Status usaha', 'sel', O.status), F('pangan', 'Bahan baku utama berupa pangan?', 'bool', null, 'Memakai inflasi bahan pangan'), F('bulanMulai', 'Bulan mulai beroperasi', 'sel', O.bulan)] });
+    var kbOn = syr || (U.musim && U.musim.mode === 'kb');
+    function withCur(opts, cur) { if (cur === undefined || cur === null) return opts; for (var i = 0; i < opts.length; i++) if (opts[i].v === cur) return opts; return opts.concat([{ v: cur, l: String(cur) }]); }
+    var biayaOpts = withCur(syr ? O.biaya.filter(function (x) { return x.v !== 'Pinjaman anuitas' && x.v !== 'Pinjaman flat'; }) : O.biaya.filter(function (x) { return x.v !== 'Murabahah' && x.v !== 'Ijarah'; }), U.pembiayaan && U.pembiayaan.jenis);
+    var musimOpts = kbOn ? O.musim : O.musim.filter(function (x) { return x.v !== 'kb'; });
+    S.push({ sec: 'Profil usaha', items: [RQ(F('nama', 'Nama usaha', 'text')), (function () { var f = F('skema', 'Skema (terkunci sesuai template)', 'sel', O.skema); f.locked = true; return f; })(), F('status', 'Status usaha', 'sel', O.status), F('pangan', 'Bahan baku utama berupa pangan?', 'bool', null, 'Memakai inflasi bahan pangan'), F('bulanMulai', 'Bulan mulai beroperasi', 'sel', O.bulan)] });
     U.produk.forEach(function (p, i) {
       var tp = tipeOf(U, p), pre = 'produk.' + i + '.', items;
-      var head = (tp === 'omzet' ? 'Kategori dagangan ' : (tp === 'batch' ? 'Komoditas bersiklus ' : (j === 'jasa' ? 'Layanan ' : 'Produk '))) + (i + 1);
+      var head = (tp === 'omzet' ? 'Kategori dagangan ' : (tp === 'batch' ? 'Komoditas bersiklus ' : (j === 'jasa' ? 'Layanan ' : (j === 'kuliner' ? 'Menu ' : 'Produk ')))) + (i + 1);
       var cn = [{ key: 'nama', label: 'Nama komponen', type: 'text' }, { key: 'nilai', label: 'Biaya per satuan (Rp)', type: 'rp' }];
-      if (tp === 'omzet') items = [F(pre + 'nama', 'Nama kategori', 'text'), F(pre + 'omzet', 'Penjualan per bulan (Rp)', 'rp'), F(pre + 'margin', 'Margin kotor (%)', 'num', null, 'Laba kotor dari harga jual'), F(pre + 'hariStok', 'Perputaran stok (hari)', 'num', null, 'Menentukan stok awal sebagai modal kerja'), F(pre + 'susutPct', 'Susut atau kedaluwarsa (%)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
-      else if (tp === 'batch') items = [F(pre + 'nama', 'Nama komoditas', 'text'), F(pre + 'satuan', 'Satuan hasil', 'text'), F(pre + 'harga', 'Harga per satuan hasil (Rp)', 'rp'), F(pre + 'siklus', 'Panjang siklus (bulan)', 'num', null, 'Dari mulai sampai panen'), F(pre + 'jumlah', 'Jumlah batch bergilir', 'num', null, 'Batch dimulai bergantian agar panen merata'), F(pre + 'hasil', 'Hasil per batch (satuan hasil)', 'num'), F(pre + 'matiPct', 'Kematian, gagal panen, atau susut (%)', 'num'),
+      if (tp === 'omzet') items = [RQ(F(pre + 'nama', 'Nama kategori', 'text')), RQ(F(pre + 'omzet', 'Penjualan per bulan (Rp)', 'rp')), RQ(F(pre + 'margin', 'Margin kotor (%)', 'num', null, 'Laba kotor dari harga jual')), F(pre + 'hariStok', 'Perputaran stok (hari)', 'num', null, 'Menentukan stok awal sebagai modal kerja'), F(pre + 'susutPct', 'Susut atau kedaluwarsa (%)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
+      else if (tp === 'batch') items = [RQ(F(pre + 'nama', 'Nama komoditas', 'text')), F(pre + 'satuan', 'Satuan hasil', 'text'), RQ(F(pre + 'harga', 'Harga per satuan hasil (Rp)', 'rp')), RQ(F(pre + 'siklus', 'Panjang siklus (bulan)', 'num', null, 'Dari mulai sampai panen')), RQ(F(pre + 'jumlah', 'Jumlah batch bergilir', 'num', null, 'Batch dimulai bergantian agar panen merata')), RQ(F(pre + 'hasil', 'Hasil per batch (satuan hasil)', 'num')), F(pre + 'matiPct', 'Kematian, gagal panen, atau susut (%)', 'num'),
         L(pre + 'biayaBatch', [{ key: 'nama', label: 'Biaya per batch', type: 'text' }, { key: 'nilai', label: 'Jumlah (Rp)', type: 'rp' }, { key: 'tahap', label: 'Waktu pembayaran', type: 'sel', opts: O.tahap }], 6, 3)];
       else {
-        items = [F(pre + 'nama', 'Nama ' + (j === 'jasa' ? 'layanan' : 'produk'), 'text'), F(pre + 'satuan', 'Satuan', 'text'), F(pre + 'harga', 'Harga jual per satuan (Rp)', 'rp'), F(pre + 'volume', 'Volume per bulan', 'num'), F(pre + 'kapasitas', 'Kapasitas per bulan (opsional)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
-        if (j === 'produksi' || j === 'campuran') items.push(F(pre + 'susutPct', 'Susut bahan (%)', 'num'));
+        items = [RQ(F(pre + 'nama', 'Nama ' + (j === 'jasa' ? 'layanan' : (j === 'kuliner' ? 'menu' : 'produk')), 'text')), F(pre + 'satuan', 'Satuan', 'text'), RQ(F(pre + 'harga', 'Harga jual per satuan (Rp)', 'rp')), RQ(F(pre + 'volume', 'Volume per bulan', 'num')), F(pre + 'kapasitas', 'Kapasitas per bulan (opsional)', 'num'), F(pre + 'tumbuh', 'Pertumbuhan per bulan (%)', 'num')];
+        if (j === 'produksi' || j === 'campuran' || j === 'kuliner') items.push(F(pre + 'susutPct', 'Susut bahan (%)', 'num'));
         items.push(L(pre + 'hppA', [{ key: 'nama', label: 'A. Bahan baku dan barang dagangan (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppB', [{ key: 'nama', label: 'B. Tenaga kerja langsung (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppC', [{ key: 'nama', label: 'C. Kemasan dan bahan pendukung (per satuan)', type: 'text' }, cn[1]], 4, 3), L(pre + 'hppD', [{ key: 'nama', label: 'D. Biaya langsung lain (per satuan)', type: 'text' }, cn[1]], 4, 3));
       }
       S.push({ sec: head, note: tp === 'unit' ? 'Isi biaya per satuan. Baris kosong boleh dibiarkan.' : '', items: items, produk: i, tipe: tp });
     });
     var q = 'q.';
     S.push({ sec: 'Biaya tetap per bulan', note: 'Dibayar walau tidak ada penjualan.', items: [L('biayaTetap', [{ key: 'nama', label: 'Biaya tetap', type: 'text' }, { key: 'nilai', label: 'Per bulan (Rp)', type: 'rp' }], 8, 5),
-      F(q + 'sewa.on', 'Membayar sewa tempat?', 'bool'), F(q + 'sewa.nilai', 'Sewa per bulan (Rp)', 'rp'), F(q + 'karyawan.on', 'Mempekerjakan karyawan dengan upah tetap?', 'bool'), F(q + 'karyawan.nilai', 'Upah tetap per bulan (Rp)', 'rp'),
-      F(q + 'kendaraan.on', 'Memakai kendaraan untuk usaha?', 'bool'), F(q + 'kendaraan.nilai', 'BBM dan perawatan per bulan (Rp)', 'rp'), F(q + 'legalitas.on', 'Perlu izin, sertifikasi, atau legalitas?', 'bool'), F(q + 'legalitas.nilai', 'Total biaya izin dan sertifikasi (Rp)', 'rp'),
-      F(q + 'marketplace.on', 'Berjualan lewat marketplace atau antar-jemput?', 'bool'), F(q + 'marketplace.pct', 'Komisi dan biaya platform (% penjualan)', 'num'), F(q + 'tempo.on', 'Menjual secara tempo?', 'bool'), F(q + 'tempo.porsiTunai', 'Porsi penjualan tunai (%)', 'num')] });
-    S.push({ sec: 'Listrik dan mesin', note: 'Isi bila memakai mesin atau alat listrik besar.', items: [F(q + 'listrik.on', 'Memakai mesin atau alat listrik besar?', 'bool'), F(q + 'listrik.metode', 'Cara menghitung', 'sel', O.metode, 'Metode A dari tagihan, Metode B dari daya alat'), F(q + 'listrik.porsiA', 'A. Porsi tagihan untuk usaha ini (%)', 'num'), F(q + 'listrik.ramaiTagihan', 'A. Tagihan bulan ramai (Rp)', 'rp'), F(q + 'listrik.ramaiVol', 'A. Volume bulan ramai', 'num'), F(q + 'listrik.sepiTagihan', 'A. Tagihan bulan sepi (Rp)', 'rp'), F(q + 'listrik.sepiVol', 'A. Volume bulan sepi', 'num'),
-      F(q + 'listrik.daya', 'B. Total daya alat produksi (watt)', 'num'), F(q + 'listrik.jam', 'B. Jam pakai per hari', 'num'), F(q + 'listrik.hari', 'B. Hari pakai per bulan', 'num'), F(q + 'listrik.tarif', 'B. Tarif listrik per kWh (Rp)', 'rp'), F(q + 'listrik.tetapLain', 'B. Listrik dan air tetap lain per bulan (Rp)', 'rp')] });
+      F(q + 'sewa.on', 'Membayar sewa tempat?', 'bool'), D(F(q + 'sewa.nilai', 'Sewa per bulan (Rp)', 'rp'), [ON(q + 'sewa.on')], true), F(q + 'karyawan.on', 'Mempekerjakan karyawan dengan upah tetap?', 'bool'), D(F(q + 'karyawan.nilai', 'Upah tetap per bulan (Rp)', 'rp'), [ON(q + 'karyawan.on')], true),
+      F(q + 'kendaraan.on', 'Memakai kendaraan untuk usaha?', 'bool'), D(F(q + 'kendaraan.nilai', 'BBM dan perawatan per bulan (Rp)', 'rp'), [ON(q + 'kendaraan.on')], true), F(q + 'legalitas.on', 'Perlu izin, sertifikasi, atau legalitas?', 'bool'), D(F(q + 'legalitas.nilai', 'Total biaya izin dan sertifikasi (Rp)', 'rp'), [ON(q + 'legalitas.on')], true),
+      F(q + 'marketplace.on', 'Berjualan lewat marketplace atau antar-jemput?', 'bool'), D(F(q + 'marketplace.pct', 'Komisi dan biaya platform (% penjualan)', 'num'), [ON(q + 'marketplace.on')], true), F(q + 'tempo.on', 'Menjual secara tempo?', 'bool'), D(F(q + 'tempo.porsiTunai', 'Porsi penjualan tunai (%)', 'num'), [ON(q + 'tempo.on')], true)] });
+    var LA = [ON(q + 'listrik.on'), { p: q + 'listrik.metode', is: ['Dari tagihan'] }], LB = [ON(q + 'listrik.on'), { p: q + 'listrik.metode', is: ['Dari daya alat'] }];
+    S.push({ sec: 'Listrik dan mesin', note: 'Isi bila memakai mesin atau alat listrik besar. Bagian A atau B aktif sesuai cara menghitung yang dipilih.', items: [F(q + 'listrik.on', 'Memakai mesin atau alat listrik besar?', 'bool'), D(F(q + 'listrik.metode', 'Cara menghitung', 'sel', O.metode, 'Metode A dari tagihan, Metode B dari daya alat'), [ON(q + 'listrik.on')], false),
+      D(F(q + 'listrik.porsiA', 'A. Porsi tagihan untuk usaha ini (%)', 'num'), LA, true), D(F(q + 'listrik.ramaiTagihan', 'A. Tagihan bulan ramai (Rp)', 'rp'), LA, true), D(F(q + 'listrik.ramaiVol', 'A. Volume bulan ramai', 'num'), LA, true), D(F(q + 'listrik.sepiTagihan', 'A. Tagihan bulan sepi (Rp)', 'rp'), LA, true), D(F(q + 'listrik.sepiVol', 'A. Volume bulan sepi', 'num'), LA, true),
+      D(F(q + 'listrik.daya', 'B. Total daya alat produksi (watt)', 'num'), LB, true), D(F(q + 'listrik.jam', 'B. Jam pakai per hari', 'num'), LB, true), D(F(q + 'listrik.hari', 'B. Hari pakai per bulan', 'num'), LB, true), D(F(q + 'listrik.tarif', 'B. Tarif listrik per kWh (Rp)', 'rp'), LB, true), D(F(q + 'listrik.tetapLain', 'B. Listrik dan air tetap lain per bulan (Rp)', 'rp'), LB, false)] });
     var prodOpts = [{ v: 'semua', l: 'Semua' }].concat(U.produk.map(function (p, i) { return { v: i, l: String(i + 1) }; }));
     S.push({ sec: 'Biaya lain yang terlewat', note: 'Tambahkan sendiri biaya yang belum tercantum. Kolom "Berlaku untuk" diisi Semua atau nomor produk.', items: [L('biayaLain', [{ key: 'nama', label: 'Nama biaya', type: 'text' }, { key: 'nilai', label: 'Nilai', type: 'num' }, { key: 'jenis', label: 'Jenis biaya', type: 'sel', opts: O.jenisBL }, { key: 'produk', label: 'Berlaku untuk', type: 'sel', opts: prodOpts }], 8, 5)] });
     S.push({ sec: 'Modal dan aset', items: [L('aset', [{ key: 'nama', label: 'Aset tetap', type: 'text' }, { key: 'nilai', label: 'Nilai (Rp)', type: 'rp' }, { key: 'umur', label: 'Umur ekonomis (bulan)', type: 'num' }], 8, 4, 'calcDep'), F('pemasaranAwal', 'Pemasaran dan promosi awal (Rp)', 'rp'), F('kasAwal', 'Saldo kas awal unit usaha (Rp)', 'rp'), F('ziswaf', (syr ? 'Dana sosial (zakat, infak, sedekah, wakaf)' : 'Hibah atau dana sosial') + ' (Rp)', 'rp'), F('lainnya', 'Sumber lain: hibah program, mitra (Rp)', 'rp')] });
-    S.push({ sec: 'Pembiayaan eksternal', note: 'Pilih Tidak ada bila memakai modal sendiri. Murabahah dan Ijarah untuk syariah, pinjaman untuk konvensional.', items: [F('pembiayaan.jenis', 'Jenis pembiayaan', 'sel', O.biaya), F('pembiayaan.lembaga', 'Nama lembaga (opsional)', 'text'), F('pembiayaan.hargaBeli', 'Murabahah: harga beli barang oleh lembaga (Rp)', 'rp'), F('pembiayaan.margin', 'Murabahah: total margin disepakati (Rp)', 'rp'), F('pembiayaan.sewa', 'Ijarah: sewa per bulan (Rp)', 'rp'), F('pembiayaan.pokok', 'Pinjaman: pokok (Rp)', 'rp'), F('pembiayaan.bunga', 'Pinjaman: bunga per tahun (%)', 'num'), F('pembiayaan.tenor', 'Tenor (bulan)', 'num')] });
-    S.push({ sec: 'Akad dan bagi hasil (skema syariah)', note: 'Diisi bila skema Syariah.', items: [F('akad.jenis', 'Akad kerja sama pengelolaan', 'sel', O.akad), F('akad.nisbahPemilik', 'Nisbah pemilik modal atas laba (%)', 'num'), F('akad.porsiModal', 'Musyarakah: porsi modal pemilik modal (%)', 'num'), F('akad.wakaf', 'Nisbah wakaf atau dana sosial atas laba (%)', 'num'), F('akad.frek', 'Frekuensi pembayaran bagi hasil', 'sel', O.frek)] });
-    S.push({ sec: 'Asumsi', note: 'Boleh dibiarkan seperti bawaan.', items: [F('musim.mode', 'Pola musim', 'sel', O.musim), F('musim.periodeAwal', 'Kalender Berkah: periode pada bulan operasi ke-1', 'sel', O.periode),
-      Ar('musim.tingkatKB', KB_PERIODE, O.level), Ar('musim.tingkatSendiri', MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); }), O.level),
-      F('ref.inflasiUmum', 'Inflasi umum per tahun (%)', 'num'), F('ref.inflasiPangan', 'Inflasi bahan pangan per tahun (%)', 'num'), F('ref.pph', 'PPh final atas penjualan (%)', 'num'), F('ref.dTinggi', 'Tambahan diskonto skenario tinggi (poin %)', 'num'), F('ref.dSangatTinggi', 'Tambahan diskonto sangat tinggi (poin %)', 'num'), F('ref.kasMinBulan', 'Target kas minimum (bulan biaya tetap)', 'num'), F('ref.amortBulan', 'Masa amortisasi izin (bulan)', 'num')] });
+    var PB = { p: 'pembiayaan.jenis', not: ['Tidak ada'] };
+    var pbItems = [F('pembiayaan.jenis', 'Jenis pembiayaan', 'sel', biayaOpts), D(F('pembiayaan.lembaga', 'Nama lembaga (opsional)', 'text'), [PB], false)];
+    if (syr) pbItems.push(D(F('pembiayaan.hargaBeli', 'Murabahah: harga beli barang oleh lembaga (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Murabahah'] }], true), D(F('pembiayaan.margin', 'Murabahah: total margin disepakati (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Murabahah'] }], true), D(F('pembiayaan.sewa', 'Ijarah: sewa per bulan (Rp)', 'rp'), [{ p: 'pembiayaan.jenis', is: ['Ijarah'] }], true));
+    else pbItems.push(D(F('pembiayaan.pokok', 'Pinjaman: pokok (Rp)', 'rp'), [PB], true), D(F('pembiayaan.bunga', 'Pinjaman: bunga per tahun (%)', 'num'), [PB], true));
+    pbItems.push(D(F('pembiayaan.tenor', 'Tenor (bulan)', 'num'), [PB], true));
+    S.push({ sec: 'Pembiayaan eksternal', note: syr ? 'Pilih Tidak ada bila memakai modal sendiri. Isian yang tidak sesuai pilihan otomatis abu-abu dan terkunci.' : 'Pilih Tidak ada bila memakai modal sendiri. Isian yang tidak sesuai pilihan otomatis abu-abu dan terkunci.', items: pbItems });
+    if (syr) S.push({ sec: 'Akad dan bagi hasil', note: 'Pilih akad. Isian yang tidak diperlukan akad tersebut otomatis abu-abu dan terkunci.', items: [F('akad.jenis', 'Akad kerja sama pengelolaan', 'sel', O.akad), D(F('akad.nisbahPemilik', 'Nisbah pemilik modal atas laba (%)', 'num'), [{ p: 'akad.jenis', is: ['Mudharabah', 'Musyarakah'] }], true), D(F('akad.porsiModal', 'Musyarakah: porsi modal pemilik modal (%)', 'num'), [{ p: 'akad.jenis', is: ['Musyarakah'] }], true), F('akad.wakaf', 'Nisbah wakaf atau dana sosial atas laba (%)', 'num'), D(F('akad.frek', 'Frekuensi pembayaran bagi hasil', 'sel', O.frek), [{ p: 'akad.jenis', is: ['Mudharabah', 'Musyarakah'] }], false)] });
+    var MK = { p: 'musim.mode', is: ['Kalender Berkah'] }, MS = { p: 'musim.mode', is: ['Pola sendiri'] };
+    var asm = [F('musim.mode', 'Pola musim', 'sel', musimOpts)];
+    if (kbOn) asm.push(D(F('musim.periodeAwal', 'Kalender Berkah: periode pada bulan operasi ke-1', 'sel', O.periode), [MK], false), D(Ar('musim.tingkatKB', KB_PERIODE, O.level), [MK], false));
+    asm.push(D(Ar('musim.tingkatSendiri', MONTHS.map(function (m, i) { return 'Bulan operasi ke-' + (i + 1); }), O.level), [MS], false));
+    asm.push(F('ref.inflasiUmum', 'Inflasi umum per tahun (%)', 'num'), F('ref.inflasiPangan', 'Inflasi bahan pangan per tahun (%)', 'num'), F('ref.pph', 'PPh final atas penjualan (%)', 'num'), F('ref.dTinggi', 'Tambahan diskonto skenario tinggi (poin %)', 'num'), F('ref.dSangatTinggi', 'Tambahan diskonto sangat tinggi (poin %)', 'num'), F('ref.kasMinBulan', 'Target kas minimum (bulan biaya tetap)', 'num'), F('ref.amortBulan', 'Masa amortisasi izin (bulan)', 'num'));
+    S.push({ sec: 'Asumsi', note: 'Boleh dibiarkan seperti bawaan.', items: asm });
     S.push({ sec: 'Kejadian khusus (opsional)', note: 'Pembelian besar, hibah, atau penerimaan sekali waktu.', items: [L('kejadian', [{ key: 'ket', label: 'Keterangan', type: 'text' }, { key: 'bulan', label: 'Bulan ke-', type: 'num' }, { key: 'jenis', label: 'Jenis', type: 'sel', opts: O.kj }, { key: 'jumlah', label: 'Jumlah (Rp)', type: 'rp' }], 5, 3)] });
     return S;
   }
@@ -2080,14 +2179,48 @@ var XL = (function () {
     try { ws.protect('', {}); } catch (e) { }
   }
 
+  /* ---------- isian bergantung (tanpa makro): validasi data kustom + format bersyarat ---------- */
+  function condOf(dep, ADDR) {
+    if (!dep || !dep.length) return null;
+    var parts = [];
+    for (var i = 0; i < dep.length; i++) {
+      var a = ADDR.f[dep[i].p]; if (!a) continue; var ref = '$B$' + a.replace(/^B/, '');
+      if (dep[i].is) parts.push(dep[i].is.length === 1 ? ref + '="' + dep[i].is[0] + '"' : 'OR(' + dep[i].is.map(function (x) { return ref + '="' + x + '"'; }).join(',') + ')');
+      else if (dep[i].not) parts.push('AND(' + dep[i].not.map(function (x) { return ref + '<>"' + x + '"'; }).join(',') + ',' + ref + '<>"")');
+    }
+    if (!parts.length) return null;
+    return parts.length === 1 ? parts[0] : 'AND(' + parts.join(',') + ')';
+  }
+  function applyDeps(ws, ADDR, pend) {
+    var terms = [], pr = 1;
+    var GREY = { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFD9D9D9' }, fgColor: { argb: 'FFD9D9D9' } }, font: { color: { argb: 'FF9A9A9A' } } };
+    var WARN = { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFE9B8' }, fgColor: { argb: 'FFFFE9B8' } } };
+    pend.forEach(function (p) {
+      var it = p.it, cond = condOf(it.dep, ADDR), rng = 'B' + p.r0 + (p.r1 > p.r0 ? ':B' + p.r1 : ''), ref = '$B$' + p.r0;
+      if (cond) ws.addConditionalFormatting({ ref: rng, rules: [{ type: 'expression', priority: pr++, formulae: ['NOT(' + cond + ')'], style: GREY }] });
+      if (it.k === 'field') {
+        var c = ws.getCell('B' + p.r0);
+        if (cond && (it.type === 'num' || it.type === 'rp')) c.dataValidation = { type: 'custom', allowBlank: true, formulae: ['AND(' + cond + ',ISNUMBER(' + ref + '),' + ref + '>=0)'], showErrorMessage: true, errorTitle: 'Isian tidak berlaku', error: 'Sel ini hanya bisa diisi bila pilihan terkait memenuhi syarat, dan harus berupa angka nol atau lebih. Lihat sel yang mengendalikannya di atas.' };
+        else if (cond && it.type === 'text') c.dataValidation = { type: 'custom', allowBlank: true, formulae: [cond], showErrorMessage: true, errorTitle: 'Isian tidak berlaku', error: 'Sel ini hanya bisa diisi bila pilihan terkait memenuhi syarat.' };
+        if (it.req) {
+          ws.addConditionalFormatting({ ref: rng, rules: [{ type: 'expression', priority: pr++, formulae: [cond ? 'AND(' + cond + ',' + ref + '="")' : ref + '=""'], style: WARN }] });
+          terms.push(cond ? '(' + cond + ')*(' + ref + '="")' : '(' + ref + '="")');
+        }
+      }
+    });
+    ws.getCell('D3').value = 'Isian wajib belum terisi'; ws.getCell('D3').font = { bold: true, size: 10, color: { argb: C.ink } }; ws.getCell('D3').alignment = { horizontal: 'right' };
+    var e = ws.getCell('E3'); e.value = { formula: terms.length ? terms.join('+') : '0' }; e.font = { bold: true, size: 12 }; e.alignment = { horizontal: 'center' }; e.border = box(); e.numFmt = '0';
+    ws.addConditionalFormatting({ ref: 'E3', rules: [{ type: 'expression', priority: pr++, formulae: ['$E$3>0'], style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFFE9B8' }, fgColor: { argb: 'FFFFE9B8' } } } }, { type: 'expression', priority: pr++, formulae: ['$E$3=0'], style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFCFEBDD' }, fgColor: { argb: 'FFCFEBDD' } }, font: { color: { argb: C.pos } } } }] });
+  }
+
   /* ---------- lembar Input ---------- */
   function writeInput(wb, U, S, opts) {
     var ws = wb.addWorksheet('Input', { views: [{ state: 'frozen', ySplit: 4, showGridLines: false }], properties: { tabColor: { argb: C.band } } });
     ws.columns = [{ width: 52 }, { width: 24 }, { width: 24 }, { width: 24 }, { width: 22 }, { width: 18 }];
-    var ADDR = { f: {}, l: {} }, META = { v: SCHEMA_V, fields: [], lists: [], arrs: [] }, r = 1, nf = 0;
+    var ADDR = { f: {}, l: {} }, META = { v: SCHEMA_V, fields: [], lists: [], arrs: [] }, r = 1, nf = 0, pend = [];
     ws.mergeCells('A1:F1'); var t = ws.getCell('A1'); t.value = 'Modalogi · Isian rencana usaha'; t.font = { size: 16, bold: true, color: { argb: C.white } }; t.fill = fillOf(C.band); t.alignment = { vertical: 'middle' }; ws.getRow(1).height = 30;
-    ws.mergeCells('A2:F2'); var st = ws.getCell('A2'); st.value = (opts.template ? 'Template' : 'Laporan') + ' · ' + usahaLabel(U) + ' · Isi sel berlatar biru muda. Sel lain terkunci. Unggah berkas ini ke Modalogi setelah diisi.'; st.font = { size: 10, color: { argb: C.mut } };
-    ws.mergeCells('A3:F3'); var br = ws.getCell('A3'); br.value = BRAND; br.font = { size: 9, italic: true, color: { argb: C.mut } };
+    ws.mergeCells('A2:F2'); var st = ws.getCell('A2'); st.value = (opts.template ? 'Template' : 'Laporan') + ' · ' + usahaLabel(U) + ' · Isi sel berlatar biru muda. Sel abu-abu tidak berlaku untuk pilihan Anda. Unggah berkas ini ke Modalogi setelah diisi.'; st.font = { size: 10, color: { argb: C.mut } };
+    ws.mergeCells('A3:C3'); var br = ws.getCell('A3'); br.value = BRAND; br.font = { size: 9, italic: true, color: { argb: C.mut } };
     ws.getRow(4).values = ['Uraian', 'Isian', 'Keterangan']; ws.getRow(4).eachCell(function (c) { c.font = { bold: true, color: { argb: C.ink } }; c.fill = fillOf(C.sec); c.border = box(); });
     r = 5;
     function inputStyle(c, type) { c.fill = fillOf(C.inp); c.border = box(C.inpLine); c.protection = { locked: false }; c.alignment = { horizontal: type === 'text' || type === 'sel' || type === 'bool' ? 'left' : 'right' }; if (type === 'rp' || type === 'num') c.numFmt = numFmt(type); }
@@ -2109,12 +2242,15 @@ var XL = (function () {
           var name = 'IN_' + (++nf), cell = ws.getCell('B' + r), v = getP(U, it.path);
           ws.getCell('A' + r).value = it.label; ws.getCell('A' + r).border = box();
           setVal(cell, it.type, it.opts, v); inputStyle(cell, it.type); validate(cell, it.type, it.opts);
+          if (it.locked) { cell.protection = { locked: true }; cell.fill = fillOf(C.calc); cell.font = { bold: true }; }
+          if (it.dep || it.req) pend.push({ it: it, r0: r, r1: r });
           if (it.hint) { ws.getCell('C' + r).value = it.hint; ws.getCell('C' + r).font = { size: 9, color: { argb: C.mut } }; }
           wb.definedNames.add("Input!$B$" + r, name); ADDR.f[it.path] = 'B' + r;
           META.fields.push({ n: name, p: it.path, t: it.type, o: it.opts ? it.opts.map(function (x) { return [x.v, x.l]; }) : null }); r++;
         } else if (it.k === 'arr') {
           var arr = getP(U, it.path) || [], r0 = r;
           it.labels.forEach(function (lab, i) { ws.getCell('A' + r).value = lab; ws.getCell('A' + r).border = box(); var c = ws.getCell('B' + r); c.value = arr[i] || it.opts[0].l; c.value = optLabel(it.opts, arr[i] === undefined ? it.opts[0].v : arr[i]); inputStyle(c, 'sel'); validate(c, 'sel', it.opts); r++; });
+          if (it.dep) pend.push({ it: it, r0: r0, r1: r - 1 });
           var nm = 'AR_' + (META.arrs.length + 1); wb.definedNames.add('Input!$B$' + r0 + ':$B$' + (r - 1), nm);
           META.arrs.push({ n: nm, p: it.path, o: it.opts.map(function (x) { return [x.v, x.l]; }), len: it.labels.length });
         } else if (it.k === 'list') {
@@ -2137,6 +2273,7 @@ var XL = (function () {
       });
       r++;
     });
+    applyDeps(ws, ADDR, pend);
     brandRow(ws, r + 1); footerOf(ws); lock(ws);
     return { ws: ws, ADDR: ADDR, META: META, nextRow: r + 3 };
   }
@@ -2199,10 +2336,11 @@ var XL = (function () {
     var ws = wb.addWorksheet('Petunjuk', { views: [{ showGridLines: false }], properties: { tabColor: { argb: 'FFF2B33D' } } });
     ws.columns = [{ width: 110 }];
     var lines = [['Modalogi · ' + (opts.template ? 'Template Excel' : 'Laporan Excel'), 't'], ['Clear plans, clearer numbers.', 's'], ['', ''],
-      ['Usaha: ' + usahaLabel(U) + ' · Skema: ' + (U.skema === 'syariah' ? 'Syariah' : 'Konvensional') + ' · ' + U.produk.length + ' ' + (U.jenis === 'dagang' ? 'kategori' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'komoditas' : 'produk atau layanan')), 'b'], ['', ''],
+      ['Usaha: ' + usahaLabel(U) + ' · Skema: ' + (U.skema === 'syariah' ? 'Syariah (template memuat akad, nisbah, dan Kalender Berkah)' : 'Konvensional (template memuat pinjaman dan pola musim sendiri)') + ' · ' + U.produk.length + ' ' + (U.jenis === 'kuliner' ? 'menu' : U.jenis === 'dagang' ? 'kategori' : (U.jenis === 'ternak' || U.jenis === 'tani' ? 'komoditas' : 'produk atau layanan')), 'b'], ['', ''],
       ['Cara memakai', 'h'], ['1. Isi hanya sel berlatar biru muda di lembar Input. Sel lain terkunci agar rumus tidak rusak (tanpa kata sandi).', ''], ['2. Baris kosong di tiap daftar disediakan untuk komponen tambahan. Biaya yang tidak ada cukup dikosongkan.', ''],
-      ['3. Lembar Ringkasan menampilkan perkiraan cepat dengan rumus Excel.', ''], ['4. Unggah berkas ini di Modalogi (menu Beranda, Unggah Excel) untuk analisis lengkap: laba rugi 12 bulan, arus kas, kelayakan, sensitivitas, dan pembiayaan.', ''],
-      ['5. Jangan mengubah nama lembar, menghapus lembar, atau memindahkan sel. Struktur isian dikenali oleh Modalogi.', ''], ['', ''],
+      ['3. Isian yang bergantung pada pilihan Ya atau Tidak, akad, pembiayaan, atau cara hitung listrik akan berwarna abu-abu dan menolak isian bila tidak berlaku. Sel berlatar kuning lembut adalah isian wajib yang belum terisi. Jumlahnya tampil di sel E3 lembar Input (hijau bila sudah nol). Menempel (paste) data bisa melewati penolakan ini, tetapi Modalogi tetap mengabaikan isian yang tidak berlaku.', ''],
+      ['4. Lembar Ringkasan menampilkan perkiraan cepat dengan rumus Excel.', ''], ['5. Unggah berkas ini di Modalogi (menu Beranda, Unggah Excel) untuk analisis lengkap: laba rugi 12 bulan, arus kas, kelayakan, sensitivitas, dan pembiayaan.', ''],
+      ['6. Jangan mengubah nama lembar, menghapus lembar, atau memindahkan sel. Struktur isian dikenali oleh Modalogi.', ''], ['', ''],
       ['Penting', 'h'], ['Alat edukasi dan simulasi, bukan nasihat keuangan. Hasil bergantung pada angka yang dimasukkan.', ''], ['', ''], [BRAND + ' · Kerangka KUBAH dan Kalender Berkah © mrk29.', 'm']];
     lines.forEach(function (l, i) { var c = ws.getCell('A' + (i + 1)); c.value = l[0]; c.alignment = { wrapText: true, vertical: 'top' }; if (l[1] === 't') c.font = { size: 18, bold: true, color: { argb: C.band } }; else if (l[1] === 's') c.font = { size: 11, italic: true, color: { argb: C.mut } }; else if (l[1] === 'h') c.font = { size: 12, bold: true, color: { argb: C.ink } }; else if (l[1] === 'b') c.font = { bold: true }; else if (l[1] === 'm') c.font = { size: 9, italic: true, color: { argb: C.mut } }; });
     footerOf(ws); lock(ws);
