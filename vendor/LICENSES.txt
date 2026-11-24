@@ -1,0 +1,3 @@
+ExcelJS 4.4.0 - MIT License - https://github.com/exceljs/exceljs
+jsPDF 4.2.1 - MIT License - https://github.com/parallax/jsPDF
+jsPDF-AutoTable 5.0.9 - MIT License - https://github.com/simonbengtsson/jsPDF-AutoTable

@@ -1,0 +1,21 @@
+{
+  "name": "Modalogi",
+  "short_name": "Modalogi",
+  "description": "Clear plans, clearer numbers.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FAF6EF",
+  "theme_color": "#1F5FD6",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
